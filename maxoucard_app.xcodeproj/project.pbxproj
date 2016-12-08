@@ -1,0 +1,491 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0911565C1DF9A106008AF936 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0911565B1DF9A106008AF936 /* main.m */; };
+		0911565F1DF9A106008AF936 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0911565E1DF9A106008AF936 /* AppDelegate.m */; };
+		091156651DF9A106008AF936 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 091156631DF9A106008AF936 /* Main.storyboard */; };
+		091156671DF9A106008AF936 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 091156661DF9A106008AF936 /* Assets.xcassets */; };
+		0911566A1DF9A106008AF936 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 091156681DF9A106008AF936 /* LaunchScreen.storyboard */; };
+		091156741DF9A49B008AF936 /* ClientVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 091156731DF9A49B008AF936 /* ClientVC.m */; };
+		091156781DF9A4F9008AF936 /* ConnectVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 091156771DF9A4F9008AF936 /* ConnectVC.m */; };
+		0911567B1DF9A50C008AF936 /* SettingsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0911567A1DF9A50C008AF936 /* SettingsVC.m */; };
+		091156801DF9A89A008AF936 /* ACUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 0911567F1DF9A89A008AF936 /* ACUtils.m */; };
+		09F796081DF9B6CF002EA2B8 /* BLEManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 09F796071DF9B6CF002EA2B8 /* BLEManager.m */; };
+		09F7960C1DF9B73A002EA2B8 /* SerialGATT.m in Sources */ = {isa = PBXBuildFile; fileRef = 09F7960A1DF9B73A002EA2B8 /* SerialGATT.m */; };
+		09F7960F1DF9B970002EA2B8 /* RootVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 09F7960E1DF9B970002EA2B8 /* RootVC.m */; };
+		09F796131DF9C55B002EA2B8 /* ServerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 09F796121DF9C55B002EA2B8 /* ServerManager.m */; };
+		09F796151DF9C593002EA2B8 /* Config.m in Sources */ = {isa = PBXBuildFile; fileRef = 09F796141DF9C593002EA2B8 /* Config.m */; };
+		E44AFA4C37FEBB5B4BCA4977 /* libPods-maxoucard_app.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B22074A0BF948A3845606F8 /* libPods-maxoucard_app.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		091156571DF9A106008AF936 /* maxoucard_app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = maxoucard_app.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0911565B1DF9A106008AF936 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		0911565D1DF9A106008AF936 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		0911565E1DF9A106008AF936 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		091156641DF9A106008AF936 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		091156661DF9A106008AF936 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		091156691DF9A106008AF936 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		0911566B1DF9A106008AF936 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		091156721DF9A49B008AF936 /* ClientVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ClientVC.h; path = controllers/ClientVC.h; sourceTree = "<group>"; };
+		091156731DF9A49B008AF936 /* ClientVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ClientVC.m; path = controllers/ClientVC.m; sourceTree = "<group>"; };
+		091156761DF9A4F9008AF936 /* ConnectVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ConnectVC.h; path = controllers/ConnectVC.h; sourceTree = "<group>"; };
+		091156771DF9A4F9008AF936 /* ConnectVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ConnectVC.m; path = controllers/ConnectVC.m; sourceTree = "<group>"; };
+		091156791DF9A50C008AF936 /* SettingsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SettingsVC.h; path = controllers/SettingsVC.h; sourceTree = "<group>"; };
+		0911567A1DF9A50C008AF936 /* SettingsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SettingsVC.m; path = controllers/SettingsVC.m; sourceTree = "<group>"; };
+		0911567C1DF9A661008AF936 /* Config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Config.h; sourceTree = "<group>"; };
+		0911567E1DF9A89A008AF936 /* ACUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACUtils.h; sourceTree = "<group>"; };
+		0911567F1DF9A89A008AF936 /* ACUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACUtils.m; sourceTree = "<group>"; };
+		09F796061DF9B6CF002EA2B8 /* BLEManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BLEManager.h; path = ble/BLEManager.h; sourceTree = "<group>"; };
+		09F796071DF9B6CF002EA2B8 /* BLEManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BLEManager.m; path = ble/BLEManager.m; sourceTree = "<group>"; };
+		09F7960A1DF9B73A002EA2B8 /* SerialGATT.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SerialGATT.m; path = ble/SerialGATT.m; sourceTree = "<group>"; };
+		09F7960B1DF9B73A002EA2B8 /* SerialGATT.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SerialGATT.h; path = ble/SerialGATT.h; sourceTree = "<group>"; };
+		09F7960D1DF9B970002EA2B8 /* RootVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RootVC.h; path = controllers/RootVC.h; sourceTree = "<group>"; };
+		09F7960E1DF9B970002EA2B8 /* RootVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RootVC.m; path = controllers/RootVC.m; sourceTree = "<group>"; };
+		09F796111DF9C55B002EA2B8 /* ServerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ServerManager.h; path = net/ServerManager.h; sourceTree = "<group>"; };
+		09F796121DF9C55B002EA2B8 /* ServerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ServerManager.m; path = net/ServerManager.m; sourceTree = "<group>"; };
+		09F796141DF9C593002EA2B8 /* Config.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Config.m; sourceTree = "<group>"; };
+		0B22074A0BF948A3845606F8 /* libPods-maxoucard_app.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-maxoucard_app.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		46295CB19AB6C614AABAD4AE /* Pods-maxoucard_app.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-maxoucard_app.debug.xcconfig"; path = "Pods/Target Support Files/Pods-maxoucard_app/Pods-maxoucard_app.debug.xcconfig"; sourceTree = "<group>"; };
+		8EEF7B5393B18A482A3E03AC /* Pods-maxoucard_app.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-maxoucard_app.release.xcconfig"; path = "Pods/Target Support Files/Pods-maxoucard_app/Pods-maxoucard_app.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		091156541DF9A106008AF936 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E44AFA4C37FEBB5B4BCA4977 /* libPods-maxoucard_app.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		06F677A3D6E8A879101BEEB7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0B22074A0BF948A3845606F8 /* libPods-maxoucard_app.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		0911564E1DF9A106008AF936 = {
+			isa = PBXGroup;
+			children = (
+				091156591DF9A106008AF936 /* maxoucard_app */,
+				091156581DF9A106008AF936 /* Products */,
+				0AF70E9CAA7DAAFE94D1A18A /* Pods */,
+				06F677A3D6E8A879101BEEB7 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		091156581DF9A106008AF936 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				091156571DF9A106008AF936 /* maxoucard_app.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		091156591DF9A106008AF936 /* maxoucard_app */ = {
+			isa = PBXGroup;
+			children = (
+				0911567C1DF9A661008AF936 /* Config.h */,
+				09F796141DF9C593002EA2B8 /* Config.m */,
+				0911567D1DF9A89A008AF936 /* aclib */,
+				09F796091DF9B6D4002EA2B8 /* ble */,
+				091156751DF9A4A1008AF936 /* controllers */,
+				09F796101DF9C547002EA2B8 /* net */,
+				0911565D1DF9A106008AF936 /* AppDelegate.h */,
+				0911565E1DF9A106008AF936 /* AppDelegate.m */,
+				091156631DF9A106008AF936 /* Main.storyboard */,
+				091156661DF9A106008AF936 /* Assets.xcassets */,
+				091156681DF9A106008AF936 /* LaunchScreen.storyboard */,
+				0911566B1DF9A106008AF936 /* Info.plist */,
+				0911565A1DF9A106008AF936 /* Supporting Files */,
+			);
+			path = maxoucard_app;
+			sourceTree = "<group>";
+		};
+		0911565A1DF9A106008AF936 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				0911565B1DF9A106008AF936 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		091156751DF9A4A1008AF936 /* controllers */ = {
+			isa = PBXGroup;
+			children = (
+				091156721DF9A49B008AF936 /* ClientVC.h */,
+				091156731DF9A49B008AF936 /* ClientVC.m */,
+				091156761DF9A4F9008AF936 /* ConnectVC.h */,
+				091156771DF9A4F9008AF936 /* ConnectVC.m */,
+				091156791DF9A50C008AF936 /* SettingsVC.h */,
+				0911567A1DF9A50C008AF936 /* SettingsVC.m */,
+				09F7960D1DF9B970002EA2B8 /* RootVC.h */,
+				09F7960E1DF9B970002EA2B8 /* RootVC.m */,
+			);
+			name = controllers;
+			sourceTree = "<group>";
+		};
+		0911567D1DF9A89A008AF936 /* aclib */ = {
+			isa = PBXGroup;
+			children = (
+				0911567E1DF9A89A008AF936 /* ACUtils.h */,
+				0911567F1DF9A89A008AF936 /* ACUtils.m */,
+			);
+			path = aclib;
+			sourceTree = "<group>";
+		};
+		09F796091DF9B6D4002EA2B8 /* ble */ = {
+			isa = PBXGroup;
+			children = (
+				09F7960A1DF9B73A002EA2B8 /* SerialGATT.m */,
+				09F7960B1DF9B73A002EA2B8 /* SerialGATT.h */,
+				09F796061DF9B6CF002EA2B8 /* BLEManager.h */,
+				09F796071DF9B6CF002EA2B8 /* BLEManager.m */,
+			);
+			name = ble;
+			sourceTree = "<group>";
+		};
+		09F796101DF9C547002EA2B8 /* net */ = {
+			isa = PBXGroup;
+			children = (
+				09F796111DF9C55B002EA2B8 /* ServerManager.h */,
+				09F796121DF9C55B002EA2B8 /* ServerManager.m */,
+			);
+			name = net;
+			sourceTree = "<group>";
+		};
+		0AF70E9CAA7DAAFE94D1A18A /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				46295CB19AB6C614AABAD4AE /* Pods-maxoucard_app.debug.xcconfig */,
+				8EEF7B5393B18A482A3E03AC /* Pods-maxoucard_app.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		091156561DF9A106008AF936 /* maxoucard_app */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0911566E1DF9A106008AF936 /* Build configuration list for PBXNativeTarget "maxoucard_app" */;
+			buildPhases = (
+				4727E8E72FB8F26D56053657 /* [CP] Check Pods Manifest.lock */,
+				091156531DF9A106008AF936 /* Sources */,
+				091156541DF9A106008AF936 /* Frameworks */,
+				091156551DF9A106008AF936 /* Resources */,
+				091156711DF9A129008AF936 /* ShellScript */,
+				AF53934DE4F2B2E1E3D1AE92 /* [CP] Embed Pods Frameworks */,
+				72F60D8AC0E4FFC3E8B9F91D /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = maxoucard_app;
+			productName = maxoucard_app;
+			productReference = 091156571DF9A106008AF936 /* maxoucard_app.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0911564F1DF9A106008AF936 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0810;
+				ORGANIZATIONNAME = CDV;
+				TargetAttributes = {
+					091156561DF9A106008AF936 = {
+						CreatedOnToolsVersion = 8.1;
+						DevelopmentTeam = GR7J6F648G;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 091156521DF9A106008AF936 /* Build configuration list for PBXProject "maxoucard_app" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 0911564E1DF9A106008AF936;
+			productRefGroup = 091156581DF9A106008AF936 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				091156561DF9A106008AF936 /* maxoucard_app */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		091156551DF9A106008AF936 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0911566A1DF9A106008AF936 /* LaunchScreen.storyboard in Resources */,
+				091156671DF9A106008AF936 /* Assets.xcassets in Resources */,
+				091156651DF9A106008AF936 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		091156711DF9A129008AF936 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/bash\nbuildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"$INFOPLIST_FILE\")\nbuildNumber=$(($buildNumber + 1))\nbuildNumber=$(printf \"%d\" $buildNumber)\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"$INFOPLIST_FILE\"";
+		};
+		4727E8E72FB8F26D56053657 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		72F60D8AC0E4FFC3E8B9F91D /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-maxoucard_app/Pods-maxoucard_app-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AF53934DE4F2B2E1E3D1AE92 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-maxoucard_app/Pods-maxoucard_app-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		091156531DF9A106008AF936 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				09F796131DF9C55B002EA2B8 /* ServerManager.m in Sources */,
+				091156741DF9A49B008AF936 /* ClientVC.m in Sources */,
+				091156801DF9A89A008AF936 /* ACUtils.m in Sources */,
+				09F796081DF9B6CF002EA2B8 /* BLEManager.m in Sources */,
+				09F7960F1DF9B970002EA2B8 /* RootVC.m in Sources */,
+				0911567B1DF9A50C008AF936 /* SettingsVC.m in Sources */,
+				091156781DF9A4F9008AF936 /* ConnectVC.m in Sources */,
+				0911565F1DF9A106008AF936 /* AppDelegate.m in Sources */,
+				09F796151DF9C593002EA2B8 /* Config.m in Sources */,
+				0911565C1DF9A106008AF936 /* main.m in Sources */,
+				09F7960C1DF9B73A002EA2B8 /* SerialGATT.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		091156631DF9A106008AF936 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				091156641DF9A106008AF936 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		091156681DF9A106008AF936 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				091156691DF9A106008AF936 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		0911566C1DF9A106008AF936 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Debug;
+		};
+		0911566D1DF9A106008AF936 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 2;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		0911566F1DF9A106008AF936 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 46295CB19AB6C614AABAD4AE /* Pods-maxoucard_app.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = GR7J6F648G;
+				INFOPLIST_FILE = maxoucard_app/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = cdv.maxoucard;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		091156701DF9A106008AF936 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8EEF7B5393B18A482A3E03AC /* Pods-maxoucard_app.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = GR7J6F648G;
+				INFOPLIST_FILE = maxoucard_app/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = cdv.maxoucard;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		091156521DF9A106008AF936 /* Build configuration list for PBXProject "maxoucard_app" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0911566C1DF9A106008AF936 /* Debug */,
+				0911566D1DF9A106008AF936 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0911566E1DF9A106008AF936 /* Build configuration list for PBXNativeTarget "maxoucard_app" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0911566F1DF9A106008AF936 /* Debug */,
+				091156701DF9A106008AF936 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0911564F1DF9A106008AF936 /* Project object */;
+}
