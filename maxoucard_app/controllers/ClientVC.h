@@ -11,9 +11,10 @@
 #import "RESideMenu.h"
 #import "Config.h"
 #import "ServerManager.h"
+#import "SettingsVC.h"
+#import "UIImageView+WebCache.h"
 
-@interface ClientVC : UIViewController <ServerManagerDelegate>
-
+@interface ClientVC : UIViewController <ServerManagerDelegate, DeviceDataDelegate>
 
 
 @end

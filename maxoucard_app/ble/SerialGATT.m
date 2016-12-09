@@ -219,7 +219,7 @@
         printf("updateValueForCharacteristic failed\n");
         return;
     }
-    [delegate serialGATTCharValueUpdated:@"FFE1" value:characteristic.value];
+    [delegate dataReceived:[characteristic value] from:peripheral];//serialGATTCharValueUpdated:@"FFE1" value:characteristic.value];
 
 
 }

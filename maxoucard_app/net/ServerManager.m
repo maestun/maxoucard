@@ -12,7 +12,7 @@
 #define URL_USERS       @"users"
 #define URL_BADGES      @"nfc_badges"
 #define URL_INFO        @"info"
-#define URL_USER_NFC    @"user"
+#define URL_PARAM_NFCID @"nfc"
 
 
 
@@ -35,20 +35,49 @@
 
 
 + (void)getAllUsers:(id<ServerManagerDelegate>)aDelegate {
-    
+    NSString * url  = [NSString stringWithFormat:@"%@/%@", [Config getServerURL], URL_USERS];
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    [manager setResponseSerializer:[AFJSONResponseSerializer serializer]];
+    [manager GET:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        if([responseObject isKindOfClass:[NSArray class]]) {
+            NSArray * users = (NSArray *)responseObject;
+            [aDelegate onGetAllUsers:users withError:nil];
+        }
+        else {
+            
+        }
+        
+    } failure:^(NSURLSessionTask *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+
 }
 
 
-+ (void)getUserFromBadgeID:(NSString *)aBadgeID delegate:(id<ServerManagerDelegate>)aDelegate {
++ (void)getUserFromNFCID:(NSString *)aNFCID delegate:(id<ServerManagerDelegate>)aDelegate {
     
-    NSString * url  = [NSString stringWithFormat:@"%@/%@?id=%@", [Config getServerURL], URL_USER_NFC, aBadgeID];
+    NSString * url  = [NSString stringWithFormat:@"%@/%@?%@=%@", [Config getServerURL], URL_USERS, URL_PARAM_NFCID, aNFCID];
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     [manager setResponseSerializer:[AFJSONResponseSerializer serializer]];
     [manager GET:url parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
+        if([responseObject isKindOfClass:[NSArray class]]) {
+            NSArray * arr = (NSArray *)responseObject;
+            if([arr count] == 1) {
+                NSDictionary * dic = [arr objectAtIndex:0];
+                [aDelegate onGetUserFromNFCID:aNFCID user:dic withError:nil];
+                
+                
+                // TODO: check-in user
+                
+                
+            }
+        }
     } failure:^(NSURLSessionTask *operation, NSError *error) {
         NSLog(@"Error: %@", error);
+        [aDelegate onGetUserFromNFCID:aNFCID user:nil withError:error];
     }];
     
 }

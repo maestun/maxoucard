@@ -7,7 +7,8 @@
 //
 
 #import "RootVC.h"
-
+#import "SettingsVC.h"
+#import "ClientVC.h"
 
 @implementation RootVC
 
@@ -28,11 +29,17 @@
     [self setPanGestureEnabled:NO];
     [self setDelegate:self];
     
-    // menu
-    [self setLeftMenuViewController: [[self storyboard] instantiateViewControllerWithIdentifier:@"idSettingsVC"]];
-    
     // front
-    [self setContentViewController:[[self storyboard] instantiateViewControllerWithIdentifier:@"idClientNC"]];
+    UINavigationController * nc = [[self storyboard] instantiateViewControllerWithIdentifier:@"idClientNC"];
+    [self setContentViewController:nc];
+    
+    
+    // settings
+    SettingsVC * settings = [[self storyboard] instantiateViewControllerWithIdentifier:@"idSettingsVC"];
+    [self setLeftMenuViewController:settings];
+    
+    ClientVC * client = (ClientVC *)[nc topViewController];
+    [settings setDeviceDelegate:client];
 }
 
 

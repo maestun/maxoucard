@@ -4,7 +4,6 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
@@ -61,13 +60,13 @@
                                 <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                                 <color key="backgroundColor" red="0.60000002379999995" green="0.60000002379999995" blue="0.60000002379999995" alpha="1" colorSpace="calibratedRGB"/>
                             </webView>
-                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8w3-g1-rFG">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8w3-g1-rFG">
                                 <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IAd-gN-Atb">
                                 <rect key="frame" x="748" y="594" width="256" height="153.5"/>
                                 <color key="backgroundColor" red="1" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                <state key="normal" title="Button">
+                                <state key="normal" title="Entrer en relation">
                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
@@ -86,7 +85,7 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="0.80000001190000003" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.19376453757286072" green="0.50850099325180054" blue="0.85232251882553101" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="Dfm-WH-Pnh" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" id="0Xp-bi-iMu"/>
                             <constraint firstItem="8w3-g1-rFG" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="2Tz-EX-Hup"/>
@@ -223,7 +222,7 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" red="1" green="0.80000001190000003" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.9212072491645813" green="0.84832113981246948" blue="0.62377804517745972" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="2NX-Ni-I5l" firstAttribute="leading" secondItem="XUz-3W-r1i" secondAttribute="leading" constant="8" id="1NK-XM-6Si"/>
                                     <constraint firstAttribute="trailing" secondItem="ffe-GU-Ul5" secondAttribute="trailing" constant="8" id="8ax-Wb-aH0"/>
@@ -259,7 +258,7 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" red="0.1911550909280777" green="0.6378670334815979" blue="0.26147949695587158" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.12637259066104889" green="0.12639245390892029" blue="0.12636536359786987" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="s45-mr-Jwr" firstAttribute="bottom" secondItem="XUz-3W-r1i" secondAttribute="top" id="Puv-YN-anC"/>
                             <constraint firstAttribute="trailing" secondItem="XUz-3W-r1i" secondAttribute="trailing" constant="60" id="j9o-K8-5nI"/>
@@ -293,8 +292,31 @@
                     <view key="view" contentMode="scaleToFill" id="axM-wv-xRe">
                         <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R9C-g5-9dP">
+                                <rect key="frame" x="748" y="594" width="256" height="153.5"/>
+                                <color key="backgroundColor" red="1" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="153.5" id="NNh-Ig-3Wb"/>
+                                    <constraint firstAttribute="width" constant="256" id="lcR-Hv-bPK"/>
+                                </constraints>
+                                <state key="normal" title="Quitter">
+                                    <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="onConnectClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="wjL-05-YhK"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" red="0.19376453760000001" green="0.50850099329999998" blue="0.85232251879999998" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="DI0-cN-CYf" firstAttribute="top" secondItem="R9C-g5-9dP" secondAttribute="bottom" constant="20.5" id="GPH-eb-S6D"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="R9C-g5-9dP" secondAttribute="trailing" id="gfn-38-bbo"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="btQuit" destination="R9C-g5-9dP" id="dBk-va-Rfb"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="c5d-ri-2Xs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

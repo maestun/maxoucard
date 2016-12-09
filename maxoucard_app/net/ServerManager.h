@@ -11,11 +11,13 @@
 
 @protocol ServerManagerDelegate <NSObject>
 - (void)onTestServer:(NSError *)aError version:(NSString *)aVersion;
-
+- (void)onGetAllUsers:(NSArray *)aUsers withError:(NSError *)aError;
+- (void)onGetUserFromNFCID:(NSString *)aNFCID user:(NSDictionary *)aUser withError:(NSError *)aError;
 @end
 
 @interface ServerManager : NSObject
 
 + (void)testServer:(NSString *)aURL delegate:(id<ServerManagerDelegate>)aDelegate ;
-
++ (void)getAllUsers:(id<ServerManagerDelegate>)aDelegate ;
++ (void)getUserFromNFCID:(NSString *)aNFCID delegate:(id<ServerManagerDelegate>)aDelegate ;
 @end

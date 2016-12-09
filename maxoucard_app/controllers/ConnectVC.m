@@ -9,6 +9,7 @@
 #import "ConnectVC.h"
 
 @interface ConnectVC ()
+@property (weak, nonatomic) IBOutlet UIButton *btQuit;
 
 @end
 

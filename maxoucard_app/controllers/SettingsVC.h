@@ -10,9 +10,12 @@
 #import "SerialGATT.h"
 #import "Config.h"
 #import "ServerManager.h"
+#import "UIKit+AFNetworking.h"
 
 @protocol DeviceDataDelegate <NSObject>
-- (void)onDataReceived:(NSString *)aString;
+- (void)onNFCIDReceived:(NSString *)aNFCID;
+- (void)didConnect;
+- (void)didDisconnect;
 @end
 
 
@@ -21,7 +24,8 @@
     NSMutableArray * mUsers;
     SerialGATT * mSensor;
 //    NSString * mLastUUID;
-    UIRefreshControl * mRefresh;
+    UIRefreshControl * mRefreshDevices;
+    UIRefreshControl * mRefreshUsers;
 }
 @property (retain, nonatomic) id<DeviceDataDelegate> deviceDelegate;
 

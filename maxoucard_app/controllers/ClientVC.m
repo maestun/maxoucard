@@ -22,6 +22,10 @@
 @end
 
 
+static UIImage * sConnected = nil;
+static UIImage * sDisconnected = nil;
+
+
 
 @implementation ClientVC
 
@@ -32,14 +36,16 @@
     
     self.navigationController.navigationBarHidden = YES;
 
+    sConnected = [ACUtils tintedImageWithColor:FlatGreen image:[UIImage imageNamed:@"gears"]];
+    sDisconnected = [ACUtils tintedImageWithColor:FlatGray image:[UIImage imageNamed:@"gears"]];
+    
+    [[self btSettings] setImage:sDisconnected forState:UIControlStateNormal];
 }
 
 
 - (void)viewWillAppear:(BOOL)animated {
     // check network
-    
     [ServerManager testServer:[Config getServerURL] delegate:self];
-    
 }
 
 
@@ -81,6 +87,21 @@
 
 
 
+// ============================================================================
+#pragma mark - DeviceDataDelegate
+// ============================================================================
+- (void)onNFCIDReceived:(NSString *)aNFCID {
+    // data shound be NFC ID
+    [SVProgressHUD showProgress:-1 status:@"Récupération de vos informations..."];
+    [ServerManager getUserFromNFCID:aNFCID delegate:self];
+}
+- (void)didConnect {
+    [[self btSettings] setImage:sConnected forState:UIControlStateNormal];
+}
+-(void)didDisconnect {
+    [[self btSettings] setImage:sDisconnected forState:UIControlStateNormal];
+}
+
 
 // ============================================================================
 #pragma mark - ServerManagerDelegate
@@ -106,7 +127,29 @@
 }
 
 
+- (void)onGetUserFromNFCID:(NSString *)aNFCID user:(NSDictionary *)aUser withError:(NSError *)aError {
+    [SVProgressHUD dismiss];
+    if(aError) {
+        
+    }
+    else {
+        // show data
+        NSString * fname = [aUser objectForKey:@"fname"];
+        NSString * lname = [aUser objectForKey:@"lname"];
+        NSDictionary * pics = [aUser objectForKey:@"picture"];
+        [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat: @"Bonjour %@ %@ !", fname, lname]];
+        
+        NSURL * bigpic = [NSURL URLWithString:[pics objectForKey:@"large"]];
+        [[self ivBackground] sd_setImageWithURL:bigpic completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            ;
+        }];
+    }
+}
 
+
+- (void)onGetAllUsers:(NSArray *)aUsers withError:(NSError *)aError {
+    
+}
 
 
 

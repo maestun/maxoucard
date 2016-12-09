@@ -21,6 +21,8 @@
 // ==========================================================================================
 #define DEFAULT_PASS                            @"skymaxx"
 #define DEFAULT_BASE_URL                        @"http://192.168.1.10:3000"
+#define BLE_HEADER                              @"NFC;"
+#define BLE_TERMINATOR                          @"."
 
 
 // ==========================================================================================
@@ -54,7 +56,6 @@
 USERPREF_DECL(NSString *, Password);
 USERPREF_DECL(NSString *, ServerURL);
 USERPREF_DECL(NSString *, LastDeviceUUID);
-
 
 @end
 

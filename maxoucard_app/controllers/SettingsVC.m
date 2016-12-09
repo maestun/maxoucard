@@ -15,6 +15,7 @@
 #define TAG_USERS               2
 
 static volatile BOOL            sScanning = NO;
+static volatile BOOL            sRefreshing = NO;
 
 
 @interface SettingsVC ()
@@ -44,9 +45,15 @@ static volatile BOOL            sScanning = NO;
     [[self tvDevices] setDataSource:self];
     
     
-    mRefresh = [[UIRefreshControl alloc] init];
-    [[self tvDevices] addSubview:mRefresh];
-    [mRefresh addTarget:self action:@selector(startScan) forControlEvents:UIControlEventValueChanged];
+    mRefreshDevices = [[UIRefreshControl alloc] init];
+    [[self tvDevices] addSubview:mRefreshDevices];
+    [mRefreshDevices addTarget:self action:@selector(startScan) forControlEvents:UIControlEventValueChanged];
+    
+    
+    mRefreshUsers = [[UIRefreshControl alloc] init];
+    [[self tvUsers] addSubview:mRefreshUsers];
+    [mRefreshUsers addTarget:self action:@selector(refreshUsers) forControlEvents:UIControlEventValueChanged];
+    
 
     [[self tfServerURL] setText:[Config getServerURL]];
     
@@ -56,6 +63,10 @@ static volatile BOOL            sScanning = NO;
     
     mPeripherals = [[NSMutableArray alloc] init];
     
+    [ServerManager getAllUsers:self];
+    
+    // start scan w/ some delay or CoreBluetooth won't be initialized !
+    [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(startScan) userInfo:nil repeats:NO];
 
 }
 
@@ -173,8 +184,25 @@ static volatile BOOL            sScanning = NO;
         [self presentViewController:ac animated:YES completion:nil];
     }
     else {
+        [SVProgressHUD showSuccessWithStatus:@"Connexion réussie !"];
         [Config setServerURL:[[self tfServerURL] text]];
     }
+}
+
+
+- (void)onGetAllUsers:(NSArray *)aUsers withError:(NSError *)aError {
+    
+    sRefreshing = NO;
+    [mRefreshUsers endRefreshing];
+    if(aError == nil){
+        mUsers = [NSMutableArray arrayWithArray:aUsers];
+        [[self tvUsers] reloadData];
+    }
+}
+
+
+- (void)onGetUserFromNFCID:(NSString *)aNFCID user:(NSDictionary *)aUser withError:(NSError *)aError {
+    // TODO:
 }
 
 
@@ -204,10 +232,10 @@ static volatile BOOL            sScanning = NO;
         CBPeripheral *peripheral = [mPeripherals objectAtIndex:[indexPath row]];
         [[cell textLabel] setText:[peripheral name]];
         [[cell textLabel] setFont:FONT_BOLD(FONT_SZ_MEDIUM)];
-        [[cell textLabel] setTextColor:TEXT_COLOR_WHITE];
+//        [[cell textLabel] setTextColor:TEXT_COLOR_WHITE];
         [[cell detailTextLabel] setText:[[peripheral identifier] UUIDString]];
         [[cell detailTextLabel] setFont:FONT(FONT_SZ_SMALL)];
-        [[cell detailTextLabel] setTextColor:TEXT_COLOR_WHITE];
+//        [[cell detailTextLabel] setTextColor:TEXT_COLOR_WHITE];
         
         UIColor * c = FlatOrange;
         if([peripheral state] == CBPeripheralStateConnected) {
@@ -232,9 +260,22 @@ static volatile BOOL            sScanning = NO;
         if (cell == nil) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId2];
         }
+        NSDictionary * user = [mUsers objectAtIndex:[indexPath row]];
+
+        [[cell textLabel] setText:[NSString stringWithFormat:@"%@ %@", [user objectForKey:@"fname"], [user objectForKey:@"lname"]]];
+        [[cell textLabel] setFont:FONT_BOLD(FONT_SZ_MEDIUM)];
+//        [[cell textLabel] setTextColor:TEXT_COLOR_WHITE];
+        [[cell detailTextLabel] setText:[user objectForKey:@"email"]];
+        [[cell detailTextLabel] setFont:FONT(FONT_SZ_SMALL)];
+//        [[cell detailTextLabel] setTextColor:TEXT_COLOR_WHITE];
         
-
-
+        CGFloat sz = 24;
+        NSDictionary * pics = [user objectForKey:@"picture"];
+        NSString * img = [pics objectForKey:@"thumbnail"];
+        [[cell imageView] setImageWithURL:[NSURL URLWithString:img]];
+//        [[cell imageView] setContentMode:UIViewContentModeScaleToFill];
+        [[[cell imageView] layer] setCornerRadius:(sz / 2)];
+        
     }
     return cell;
 }
@@ -253,6 +294,13 @@ static volatile BOOL            sScanning = NO;
 }
 
 
+// ============================================================================
+#pragma mark - Network Connectivity
+// ============================================================================
+- (void)refreshUsers {
+    sRefreshing = YES;
+    [ServerManager getAllUsers:self];
+}
 
 
 
@@ -304,7 +352,7 @@ static volatile BOOL            sScanning = NO;
 
 - (void)stopScan {
     sScanning = NO;
-    [mRefresh endRefreshing];
+    [mRefreshDevices endRefreshing];
 }
 
 
@@ -325,22 +373,30 @@ static volatile BOOL            sScanning = NO;
         [self connectToPeripheral:peripheral];
     }
 }
-
-
-- (void)serialGATTCharValueUpdated: (NSString *)UUID value: (NSData *)data {
-    NSLog(@"DATA RECEIVED FROM %@", UUID);
-    NSString * str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+//- (void)serialGATTCharValueUpdated: (NSString *)UUID value: (NSData *)data {
+//    NSLog(@"DATA RECEIVED FROM %@", UUID);
+//    NSString * str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+//    NSLog(@"%@", str);
+//    [[self deviceDelegate] onDataReceived:str];
+//}
+- (void)dataReceived:(NSData *)aData from:(CBPeripheral *)aPeripheral {
+    NSLog(@"Data from %@", [aPeripheral name]);
+    NSString * str = [[NSString alloc] initWithData:aData encoding:NSASCIIStringEncoding];
     NSLog(@"%@", str);
-    [[self deviceDelegate] onDataReceived:str];
+    if([str hasPrefix:BLE_HEADER] && [str hasSuffix:BLE_TERMINATOR]) {
+        // seems valid ble string, parse
+        str = [str stringByReplacingOccurrencesOfString:BLE_HEADER withString:@""];
+        str = [str stringByReplacingOccurrencesOfString:BLE_TERMINATOR withString:@""];
+        [[self deviceDelegate] onNFCIDReceived:str];
+    }
 }
-
 
 - (void)setConnect:(CBPeripheral *)aPeripheral {
     [Config setLastDeviceUUID:[[aPeripheral identifier] UUIDString]];
     NSLog(@"%@ connected !", [aPeripheral name]);
     [[self tvDevices] reloadData];
-    
-    [SVProgressHUD showSuccessWithStatus:@"Connecté !"];
+    [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:@"Connecté à %@", [aPeripheral name]]];
+    [[self deviceDelegate] didConnect];
 }
 
 
@@ -348,15 +404,9 @@ static volatile BOOL            sScanning = NO;
     [Config resetLastDeviceUUID];
     NSLog(@"%@ disconnected !", [aPeripheral name]);
     [[self tvDevices] reloadData];
-    
-    [SVProgressHUD showSuccessWithStatus:@"Déconnecté."];
+    [SVProgressHUD showErrorWithStatus:@"Déconnecté."];
+    [[self deviceDelegate] didDisconnect];
 }
-
-
-
-
-
-
 
 
 
