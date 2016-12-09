@@ -19,6 +19,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *btConnect;
 @property (weak, nonatomic) IBOutlet UIButton *btSettings;
 @property (weak, nonatomic) IBOutlet UIImageView *ivBackground;
+@property (weak, nonatomic) IBOutlet GenericUserView *gvUser;
+
 @end
 
 
@@ -80,7 +82,12 @@ static UIImage * sDisconnected = nil;
 
 - (IBAction)onConnectClicked:(id)sender {
 
-    UIViewController * vc = [[self storyboard] instantiateViewControllerWithIdentifier:@"idConnectVC"];
+    ConnectVC * vc = [[self storyboard] instantiateViewControllerWithIdentifier:@"idConnectVC"];
+    [self setDeviceDelegate:vc];
+    
+    if([[self gvUser] user]) {
+        [vc setUserLeft:[[self gvUser] user]];
+    }
     [[self navigationController] pushViewController:vc animated:YES];
 
 }
@@ -93,7 +100,17 @@ static UIImage * sDisconnected = nil;
 - (void)onNFCIDReceived:(NSString *)aNFCID {
     // data shound be NFC ID
     [SVProgressHUD showProgress:-1 status:@"Récupération de vos informations..."];
-    [ServerManager getUserFromNFCID:aNFCID delegate:self];
+    
+    UIViewController * top = [[self navigationController] topViewController];
+    if(top == self) {
+        [ServerManager getUserFromNFCID:aNFCID delegate:self];
+    }
+    else {
+        if([top isKindOfClass:[ConnectVC class]]) {
+            ConnectVC * connect = (ConnectVC *)top;
+            [connect onNFCIDReceived:aNFCID];
+        }
+    }
 }
 - (void)didConnect {
     [[self btSettings] setImage:sConnected forState:UIControlStateNormal];
@@ -127,22 +144,14 @@ static UIImage * sDisconnected = nil;
 }
 
 
-- (void)onGetUserFromNFCID:(NSString *)aNFCID user:(NSDictionary *)aUser withError:(NSError *)aError {
+- (void)onGetUserFromNFCID:(NSString *)aNFCID user:(GenericUser *)aUser withError:(NSError *)aError {
     [SVProgressHUD dismiss];
     if(aError) {
         
     }
     else {
         // show data
-        NSString * fname = [aUser objectForKey:@"fname"];
-        NSString * lname = [aUser objectForKey:@"lname"];
-        NSDictionary * pics = [aUser objectForKey:@"picture"];
-        [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat: @"Bonjour %@ %@ !", fname, lname]];
-        
-        NSURL * bigpic = [NSURL URLWithString:[pics objectForKey:@"large"]];
-        [[self ivBackground] sd_setImageWithURL:bigpic completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-            ;
-        }];
+        [[self gvUser] setUser:aUser welcome:LOREM_IPSUM];
     }
 }
 

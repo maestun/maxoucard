@@ -201,7 +201,7 @@ static volatile BOOL            sRefreshing = NO;
 }
 
 
-- (void)onGetUserFromNFCID:(NSString *)aNFCID user:(NSDictionary *)aUser withError:(NSError *)aError {
+- (void)onGetUserFromNFCID:(NSString *)aNFCID user:(GenericUser *)aUser withError:(NSError *)aError {
     // TODO:
 }
 

@@ -7,7 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GenericUserView.h"
+#import "SettingsVC.h"
 
-@interface ConnectVC : UIViewController
+@interface ConnectVC : UIViewController <DeviceDataDelegate, ServerManagerDelegate>
+@property (weak, nonatomic) IBOutlet GenericUserView *gvLeft;
+@property (weak, nonatomic) IBOutlet GenericUserView *gvRight;
 
+@property (weak, nonatomic) GenericUser *userRight;
+@property (weak, nonatomic) GenericUser *userLeft;
 @end

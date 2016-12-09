@@ -67,7 +67,23 @@
             NSArray * arr = (NSArray *)responseObject;
             if([arr count] == 1) {
                 NSDictionary * dic = [arr objectAtIndex:0];
-                [aDelegate onGetUserFromNFCID:aNFCID user:dic withError:nil];
+                
+                GenericUser * user = [[GenericUser alloc] init];
+                [user setTitle:[dic objectForKey:@"title"]];
+                [user setFname:[dic objectForKey:@"fname"]];
+                [user setLname:[dic objectForKey:@"lname"]];
+                [user setNfc:[dic objectForKey:@"nfc"]];
+                [user setEmail:[dic objectForKey:@"email"]];
+                [user setIdent:[dic objectForKey:@"id"]];
+                [user setLinkedin:[dic objectForKey:@"linkedin"]];
+                [user setPhone:[dic objectForKey:@"phone"]];
+                
+                NSDictionary * pics = [dic objectForKey:@"picture"];
+                [user setBigpicURL:[pics objectForKey:@"large"]];
+
+                [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat: @"Bonjour %@ %@ !", [user fname], [user lname]]];
+
+                [aDelegate onGetUserFromNFCID:aNFCID user:user withError:nil];
                 
                 
                 // TODO: check-in user
@@ -79,6 +95,11 @@
         NSLog(@"Error: %@", error);
         [aDelegate onGetUserFromNFCID:aNFCID user:nil withError:error];
     }];
+    
+}
+
+
++ (void)requestConnect:(GenericUser *)aUser1 with:(GenericUser *)aUser2 {
     
 }
 

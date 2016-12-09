@@ -16,6 +16,9 @@
 		091156781DF9A4F9008AF936 /* ConnectVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 091156771DF9A4F9008AF936 /* ConnectVC.m */; };
 		0911567B1DF9A50C008AF936 /* SettingsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0911567A1DF9A50C008AF936 /* SettingsVC.m */; };
 		091156801DF9A89A008AF936 /* ACUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 0911567F1DF9A89A008AF936 /* ACUtils.m */; };
+		09A5C0DE1DFADC93002A9C19 /* GenericUserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 09A5C0DD1DFADC93002A9C19 /* GenericUserView.m */; };
+		09A5C0E11DFADCAB002A9C19 /* GenericUserView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 09A5C0E01DFADCAB002A9C19 /* GenericUserView.xib */; };
+		09A5C0E41DFAE957002A9C19 /* GenericUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 09A5C0E31DFAE957002A9C19 /* GenericUser.m */; };
 		09F796081DF9B6CF002EA2B8 /* BLEManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 09F796071DF9B6CF002EA2B8 /* BLEManager.m */; };
 		09F7960C1DF9B73A002EA2B8 /* SerialGATT.m in Sources */ = {isa = PBXBuildFile; fileRef = 09F7960A1DF9B73A002EA2B8 /* SerialGATT.m */; };
 		09F7960F1DF9B970002EA2B8 /* RootVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 09F7960E1DF9B970002EA2B8 /* RootVC.m */; };
@@ -42,6 +45,11 @@
 		0911567C1DF9A661008AF936 /* Config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Config.h; sourceTree = "<group>"; };
 		0911567E1DF9A89A008AF936 /* ACUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACUtils.h; sourceTree = "<group>"; };
 		0911567F1DF9A89A008AF936 /* ACUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACUtils.m; sourceTree = "<group>"; };
+		09A5C0DC1DFADC93002A9C19 /* GenericUserView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GenericUserView.h; path = views/GenericUserView.h; sourceTree = "<group>"; };
+		09A5C0DD1DFADC93002A9C19 /* GenericUserView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GenericUserView.m; path = views/GenericUserView.m; sourceTree = "<group>"; };
+		09A5C0E01DFADCAB002A9C19 /* GenericUserView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = GenericUserView.xib; path = views/GenericUserView.xib; sourceTree = "<group>"; };
+		09A5C0E21DFAE957002A9C19 /* GenericUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GenericUser.h; path = entities/GenericUser.h; sourceTree = "<group>"; };
+		09A5C0E31DFAE957002A9C19 /* GenericUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GenericUser.m; path = entities/GenericUser.m; sourceTree = "<group>"; };
 		09F796061DF9B6CF002EA2B8 /* BLEManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BLEManager.h; path = ble/BLEManager.h; sourceTree = "<group>"; };
 		09F796071DF9B6CF002EA2B8 /* BLEManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BLEManager.m; path = ble/BLEManager.m; sourceTree = "<group>"; };
 		09F7960A1DF9B73A002EA2B8 /* SerialGATT.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SerialGATT.m; path = ble/SerialGATT.m; sourceTree = "<group>"; };
@@ -102,7 +110,9 @@
 				0911567D1DF9A89A008AF936 /* aclib */,
 				09F796091DF9B6D4002EA2B8 /* ble */,
 				091156751DF9A4A1008AF936 /* controllers */,
+				09A5C0E51DFAE95C002A9C19 /* entities */,
 				09F796101DF9C547002EA2B8 /* net */,
+				09A5C0DF1DFADC97002A9C19 /* views */,
 				0911565D1DF9A106008AF936 /* AppDelegate.h */,
 				0911565E1DF9A106008AF936 /* AppDelegate.m */,
 				091156631DF9A106008AF936 /* Main.storyboard */,
@@ -144,6 +154,25 @@
 				0911567F1DF9A89A008AF936 /* ACUtils.m */,
 			);
 			path = aclib;
+			sourceTree = "<group>";
+		};
+		09A5C0DF1DFADC97002A9C19 /* views */ = {
+			isa = PBXGroup;
+			children = (
+				09A5C0DC1DFADC93002A9C19 /* GenericUserView.h */,
+				09A5C0DD1DFADC93002A9C19 /* GenericUserView.m */,
+				09A5C0E01DFADCAB002A9C19 /* GenericUserView.xib */,
+			);
+			name = views;
+			sourceTree = "<group>";
+		};
+		09A5C0E51DFAE95C002A9C19 /* entities */ = {
+			isa = PBXGroup;
+			children = (
+				09A5C0E21DFAE957002A9C19 /* GenericUser.h */,
+				09A5C0E31DFAE957002A9C19 /* GenericUser.m */,
+			);
+			name = entities;
 			sourceTree = "<group>";
 		};
 		09F796091DF9B6D4002EA2B8 /* ble */ = {
@@ -241,6 +270,7 @@
 				0911566A1DF9A106008AF936 /* LaunchScreen.storyboard in Resources */,
 				091156671DF9A106008AF936 /* Assets.xcassets in Resources */,
 				091156651DF9A106008AF936 /* Main.storyboard in Resources */,
+				09A5C0E11DFADCAB002A9C19 /* GenericUserView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -315,6 +345,7 @@
 				09F796131DF9C55B002EA2B8 /* ServerManager.m in Sources */,
 				091156741DF9A49B008AF936 /* ClientVC.m in Sources */,
 				091156801DF9A89A008AF936 /* ACUtils.m in Sources */,
+				09A5C0DE1DFADC93002A9C19 /* GenericUserView.m in Sources */,
 				09F796081DF9B6CF002EA2B8 /* BLEManager.m in Sources */,
 				09F7960F1DF9B970002EA2B8 /* RootVC.m in Sources */,
 				0911567B1DF9A50C008AF936 /* SettingsVC.m in Sources */,
@@ -323,6 +354,7 @@
 				09F796151DF9C593002EA2B8 /* Config.m in Sources */,
 				0911565C1DF9A106008AF936 /* main.m in Sources */,
 				09F7960C1DF9B73A002EA2B8 /* SerialGATT.m in Sources */,
+				09A5C0E41DFAE957002A9C19 /* GenericUser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

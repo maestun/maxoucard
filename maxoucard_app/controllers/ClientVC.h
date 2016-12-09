@@ -13,9 +13,14 @@
 #import "ServerManager.h"
 #import "SettingsVC.h"
 #import "UIImageView+WebCache.h"
+#import "GenericUserView.h"
+#import "ConnectVC.h"
 
-@interface ClientVC : UIViewController <ServerManagerDelegate, DeviceDataDelegate>
+@interface ClientVC : UIViewController <ServerManagerDelegate, DeviceDataDelegate> {
+    
+}
 
+@property (retain, nonatomic) id<DeviceDataDelegate> deviceDelegate;
 
 @end
 

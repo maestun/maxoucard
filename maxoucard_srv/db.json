@@ -1,0 +1,84 @@
+{
+	"posts": [
+    	{ "id": 1, "title": "json-server", "author": "typicode" }
+  	],
+  	
+  	"comments": [
+    	{ "id": 1, "body": "some comment", "postId": 1 }
+  	],
+
+  	"skin": {
+  		"name": "Caisse d'Epargne",
+    	"fgcolor": "#ff00ff",
+    	"bgcolor": "#0000ff",
+    	"font_name": "AvenirNext-Regular",
+    	"font_fgcolor": "#0000ff",
+    	"font_bgcolor": "#0000ff",
+    	"font_sz_large": "20",
+    	"font_sz_medium": "16",
+    	"font_sz_small": "12",
+    	"bg_image": "http://www.wallpaperup.com/uploads/wallpapers/2013/04/29/80317/c0f659ab2c34b232cb573a03147f5a04.jpg"
+  	},
+
+	"nfc_badges": [
+		{ "id": "6364534764097956"}
+	],
+
+	"users": [
+	{
+	  	"id": "48764587645765",
+	  	"title": "MR",
+	    "fname": "Olivier",
+	    "lname": "Huguenot",
+		"email": "olivier.huguenot@gmail.com",
+		"linkedin": "linkedin.com/in/huguenot",
+		"birth": "1978-09-15 00:00:00",
+	    "phone": "(656)-976-4980",
+	    "nat": "NL",
+	    "nfc": "OLIVIER_NFC_ID",
+		"created": "1983-07-14 07:29:45",
+		"updated" : "1983-07-14 07:29:45",
+		"picture": {
+	      "large": "https://scontent-cdg2-1.xx.fbcdn.net/v/t1.0-9/14316877_10154428123792488_4891076077149679297_n.jpg?oh=74daa48df85972b936111b54ece2f658&oe=58F6C30E",
+	      "medium": "https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAAXpAAAAJDYzNzcwZDk4LTMxMGYtNDQ0OC1hNDk0LWQ2NDA2ZjVjNzZmMQ.jpg",
+	      "thumbnail": "https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAAXpAAAAJDYzNzcwZDk4LTMxMGYtNDQ0OC1hNDk0LWQ2NDA2ZjVjNzZmMQ.jpg"
+	    },
+	    "location": {
+	        "street": "1861 jan pieterszoon coenstraat",
+	        "city": "maasdriel",
+	        "state": "zeeland",
+	        "postcode": 69217
+	    }
+	},
+	{
+	  	"id": "75878509286876",
+	  	"title": "mr",
+	    "fname": "Max",
+	    "lname": "Dejean",
+		"email": "maxx@free.fr",
+		"linkedin": "https://www.facebook.com/skym4x",
+		"birth": "1978-10-03 00:00:00",
+	    "phone": "(656)-976-4980",
+	    "nat": "NL",
+	    "nfc": "DUMMY_NFC_ID",
+		"created": "1983-07-14 07:29:45",
+		"updated" : "1983-07-14 07:29:45",
+		"picture": {
+	      "large": "http://www.acecomputers-tn.com/awful/august2009.jpg",
+	      "medium": "https://scontent-cdg2-1.xx.fbcdn.net/v/t1.0-9/10462460_10204050863061904_192063741534612332_n.jpg?oh=89e1cfe517ef52b9b17b38052e860e32&oe=58C1C9DF",
+	      "thumbnail": "https://scontent-cdg2-1.xx.fbcdn.net/v/t1.0-9/10462460_10204050863061904_192063741534612332_n.jpg?oh=89e1cfe517ef52b9b17b38052e860e32&oe=58C1C9DF"
+	    },
+	    "location": {
+	        "street": "1861 jan pieterszoon coenstraat",
+	        "city": "maasdriel",
+	        "state": "zeeland",
+	        "postcode": 69217
+	    }
+	}
+	],
+
+
+	"info": {
+    	"version": "1.1"
+  	}
+}

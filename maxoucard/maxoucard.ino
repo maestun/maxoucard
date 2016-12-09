@@ -8,6 +8,7 @@
 #define BLE_PASS          "123456"
 // #define NO_SERIAL                  // décommenter pour debug série
 #define PIN_DEBUG_BUTTON  2
+#define PIN_DEBUG_BUTTON2 3
 
 
 
@@ -102,6 +103,7 @@ void setup() {
 
   // TODO: init NFC
   pinMode(PIN_DEBUG_BUTTON, INPUT_PULLUP);
+  pinMode(PIN_DEBUG_BUTTON2, INPUT_PULLUP);
 }
 
 
@@ -111,6 +113,10 @@ void loop() {
   if(digitalRead(PIN_DEBUG_BUTTON) == HIGH) {
     dprintln(F("debug button!"));
     HM10_SendData("DUMMY_NFC_ID");
+  }
+  if(digitalRead(PIN_DEBUG_BUTTON2) == HIGH) {
+    dprintln(F("debug button 2!"));
+    HM10_SendData("OLIVIER_NFC_ID");
   }
 
   // teh wait !
