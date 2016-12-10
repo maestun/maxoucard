@@ -1,6 +1,7 @@
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h> 
 #include <ESP8266WebServer.h>
+#include <WiFiManager.h>
 #include <SPI.h>
 #include <EEPROM.h>
 #include "MFRC522.h"
@@ -19,16 +20,22 @@
 // ===================================================================
 // Configuration
 // ===================================================================
+#define AUTOCONNECT_NAME    "Borne1_Config"
+#define AUTOCONNECT_PASS    "12345678"
 #define AP_NAME             "Borne1"
 #define AP_PASS             "12345678"
+
+#define DELIMITER           ";"
 
 #define WEB_SERVER_PORT     80
 #define SOCKET_SERVER_PORT  81
 
 #define GPIO2               2
 
-#define EEPROM_WIFI_ADDR    0x0
-#define EEPROM_WIFI_LEN     64
+#define EEPROM_WIFI_SSID_ADDR     0x0
+#define EEPROM_WIFI_SSID_LEN      0x20
+#define EEPROM_WIFI_PASS_ADDR     EEPROM_WIFI_SSID_LEN
+#define EEPROM_WIFI_PASS_LEN      0x20
 
 /* wiring the MFRC522 to ESP8266 (ESP-12)
 RST     = GPIO5
@@ -57,6 +64,42 @@ void handleRoot() {
   gWebServer.send(200, "text/html", "<h1>Hello World, Web Server !</h1>");
 }
 
+
+void autoconnect(bool aReset) {
+  //WiFiManager
+    //Local intialization. Once its business is done, there is no need to keep it around
+    WiFiManager wifiManager;
+    //reset saved settings
+    if(aReset) {
+      wifiManager.resetSettings();
+    }
+    //fetches ssid and pass from eeprom and tries to connect
+    //if it does not connect it starts an access point with the specified name
+    //here  "AutoConnectAP"
+    //and goes into a blocking loop awaiting configuration
+    wifiManager.autoConnect(AUTOCONNECT_NAME, AUTOCONNECT_PASS);
+    //or use this for auto generated name ESP + ChipID
+    //wifiManager.autoConnect();
+}
+
+
+void connectWiFi(char * aSSID, char * aPass) {
+  dprint("Connecting to ");
+  dprint(aSSID);
+  dprint(" with pass ");
+  dprintln(aPass);
+  WiFi.begin(aSSID, aPass);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    dprint(".");
+  }
+  dprintln("");
+  dprint("WiFi connected, ");  
+  dprint("IP address: ");
+  dprintln(WiFi.localIP());
+}
+
+
 char buf[256] = {0};
 // serveur socket
 void onServerSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght) {
@@ -75,38 +118,26 @@ void onServerSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t l
         case WStype_TEXT:
             Serial.printf("[%u] get Text: %s\n", lenght, payload);
 
-      // copy payload to buffer
-      for(int i=0; i< lenght; i++) {
-        buf[i] = payload[i];
-      }
-      buf[lenght] = '\0';
+            // copy payload to string buffer
+            for(int i=0; i< lenght; i++) {
+              buf[i] = payload[i];
+            }
+            buf[lenght] = '\0';
  
-  if(!strcmp(buf, "L1")) {
-    dprintln("led ON!!!");
-    pinMode(GPIO2, OUTPUT);
-    digitalWrite(GPIO2, HIGH);
-  }
-  else if(!strcmp(buf,"L0")) {
-    dprintln("led OFF!!!");
-    pinMode(GPIO2, OUTPUT);
-    digitalWrite(GPIO2, LOW);
-  }
-  else {
-    // save wifi info onto EEPROM ?
-    if(!strncmp(buf, "WIFI", 4)) {
-      dprintln("Saving wifi into EEPROM");
-      uint8_t addr = EEPROM_WIFI_ADDR;
-      for(int i = 0; i< lenght; i++) {
-        EEPROM.write(addr++, payload[i]);
-      }
-      for(int i = lenght; i< EEPROM_WIFI_LEN; i++) {
-        EEPROM.write(addr++, 0x0);
-      }
-      dprintln("wifi info saved, reset...");
-      ESP.reset();
-    }
-  }
-
+            if(!strcmp(buf, "L1")) {
+              dprintln("led ON!!!");
+              pinMode(GPIO2, OUTPUT);
+              digitalWrite(GPIO2, HIGH);
+            }
+            else if(!strcmp(buf,"L0")) {
+              dprintln("led OFF!!!");
+              pinMode(GPIO2, OUTPUT);
+              digitalWrite(GPIO2, LOW);
+            }
+            else {
+             
+            }
+          
 
 
 
@@ -131,53 +162,16 @@ void onServerSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t l
 
 void setup() {
   delay(2000);
+
+  EEPROM.begin(512);
   
   // démarrage out put série pour debug
   dprint_init(115200);
   dprintln(F("Booting...."));
 
   // connexion au réseau WiFi
-  // read EEPROM contents
-  dprintln(F("Read EEPROM...."));
-  char buf[EEPROM_WIFI_LEN] = {0};
-  for(int i = EEPROM_WIFI_ADDR; i < EEPROM_WIFI_LEN; i++) {
-    buf[i] = EEPROM.read(i);
-  }
-
-  if(!strncmp(buf, "WIFI", 4)) {
-    dprintln(F("Found WiFi connection info: "));
-    const char delim[2] = ";";
-    char * ssid = strtok(NULL, delim);
-    char * pass = strtok(NULL, delim);
-    dprintln(ssid);
-    dprintln(pass);
-
-      dprint("Connecting to ");
-      dprint(ssid);
-      WiFi.begin(ssid, pass);
-      while (WiFi.status() != WL_CONNECTED) {
-        delay(500);
-        dprint(".");
-      }
-      dprintln("");
-      dprint("WiFi connected, ");  
-      dprint("IP address: ");
-      dprintln(WiFi.localIP());
-  }
+  autoconnect(false);
   
-  /*
-  dprint("Connecting to ");
-  dprint(ssid);
-  WiFi.begin(ssid, pass);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(100);
-    dprint(".");
-  }
-  dprintln("");
-  dprint("WiFi connected, ");  
-  dprint("IP address: ");
-  dprintln(WiFi.localIP());
-  */
 
   // configuration en tant que AP
   dprint("Creating soft AP ");
