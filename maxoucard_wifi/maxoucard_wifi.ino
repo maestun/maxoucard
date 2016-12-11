@@ -6,36 +6,30 @@
 #include <EEPROM.h>
 #include "MFRC522.h"
 #include <WebSocketsServer.h>
-#include <WebSocketsClient.h>
+
+ 
+// ===================================================================
+// Configuration
+// ===================================================================
+#define SOFTAP_NAME               "Borne1"
+#define SOFTAP_PASS               "12345678"
+#define AUTOCONNECT_NAME          SOFTAP_NAME "-Config"
+#define AUTOCONNECT_PASS          "12345678"
+
+#define WEB_SERVER_PORT           80
+#define SOCKET_SERVER_PORT        81
+
+#define GPIO2                     0x2
+
+
 
 // ===================================================================
 // Debug stuff
 // ===================================================================
-
 #  define dprint_init(x)  Serial.begin(x); delay(100); Serial.println("Startup.")
 #  define dprint(x)       Serial.print(x)
 #  define dprintln(x)     Serial.println(x)
- 
 
-// ===================================================================
-// Configuration
-// ===================================================================
-#define AUTOCONNECT_NAME    "Borne1_Config"
-#define AUTOCONNECT_PASS    "12345678"
-#define AP_NAME             "Borne1"
-#define AP_PASS             "12345678"
-
-#define DELIMITER           ";"
-
-#define WEB_SERVER_PORT     80
-#define SOCKET_SERVER_PORT  81
-
-#define GPIO2               2
-
-#define EEPROM_WIFI_SSID_ADDR     0x0
-#define EEPROM_WIFI_SSID_LEN      0x20
-#define EEPROM_WIFI_PASS_ADDR     EEPROM_WIFI_SSID_LEN
-#define EEPROM_WIFI_PASS_LEN      0x20
 
 /* wiring the MFRC522 to ESP8266 (ESP-12)
 RST     = GPIO5
@@ -49,15 +43,11 @@ GND     = GND
 #define RST_PIN  5  // RST-PIN für RC522 - RFID - SPI - Modul GPIO5 
 #define SS_PIN  4  // SDA-PIN für RC522 - RFID - SPI - Modul GPIO4 
 
-const char *ssid =  "paprika2";     // change according to your Network - cannot be longer than 32 characters!
-const char *pass =  "WIFI12Stones"; // change according to your Network
 
-MFRC522 mfrc522(SS_PIN, RST_PIN); // Create MFRC522 instance
-
+char                gBuffer[256] = {0};
+MFRC522             gRC522(SS_PIN, RST_PIN); // Create MFRC522 instance
 WebSocketsServer    gSocketServer = WebSocketsServer(SOCKET_SERVER_PORT);  // creation d'un serveur WebSocket
-WebSocketsClient    gSocketClient;
-
-ESP8266WebServer  gWebServer(WEB_SERVER_PORT); // creation d'un serveur web sur le port 80
+ESP8266WebServer    gWebServer(WEB_SERVER_PORT); // creation d'un serveur web sur le port 80
 
 // serveur web
 void handleRoot() {
@@ -65,42 +55,31 @@ void handleRoot() {
 }
 
 
+// Tries to connect to previously saved AP (unless aReset is set to true).
+// If no previous configuration found, this will create a softAP named AUTOCONNECT_NAME.
+// Then, connect any browser-enabled device to this softAP, and configure your AP.
 void autoconnect(bool aReset) {
-  //WiFiManager
-    //Local intialization. Once its business is done, there is no need to keep it around
     WiFiManager wifiManager;
-    //reset saved settings
+
     if(aReset) {
       wifiManager.resetSettings();
     }
-    //fetches ssid and pass from eeprom and tries to connect
-    //if it does not connect it starts an access point with the specified name
-    //here  "AutoConnectAP"
-    //and goes into a blocking loop awaiting configuration
     wifiManager.autoConnect(AUTOCONNECT_NAME, AUTOCONNECT_PASS);
-    //or use this for auto generated name ESP + ChipID
-    //wifiManager.autoConnect();
 }
 
 
-void connectWiFi(char * aSSID, char * aPass) {
-  dprint("Connecting to ");
-  dprint(aSSID);
-  dprint(" with pass ");
-  dprintln(aPass);
-  WiFi.begin(aSSID, aPass);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    dprint(".");
-  }
-  dprintln("");
-  dprint("WiFi connected, ");  
-  dprint("IP address: ");
-  dprintln(WiFi.localIP());
+// Creates a softAP
+void createSoftAP(char * aName, char * aPass) {
+    dprint("Creating soft AP ");
+    dprintln(aName);
+    WiFi.softAP(aName, aPass);
+    IPAddress ap_ip = WiFi.softAPIP();
+    dprint("Created soft AP with IP ");
+    dprintln(ap_ip);
 }
 
 
-char buf[256] = {0};
+
 // serveur socket
 void onServerSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t lenght) {
 
@@ -119,29 +98,21 @@ void onServerSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t l
             Serial.printf("[%u] get Text: %s\n", lenght, payload);
 
             // copy payload to string buffer
-            for(int i=0; i< lenght; i++) {
-              buf[i] = payload[i];
+            for(int i = 0; i < lenght; i++) {
+              gBuffer[i] = payload[i];
             }
-            buf[lenght] = '\0';
+            gBuffer[lenght] = '\0';
  
-            if(!strcmp(buf, "L1")) {
+            if(!strcmp(gBuffer, "L1")) {
               dprintln("led ON!!!");
               pinMode(GPIO2, OUTPUT);
               digitalWrite(GPIO2, HIGH);
             }
-            else if(!strcmp(buf,"L0")) {
+            else if(!strcmp(gBuffer,"L0")) {
               dprintln("led OFF!!!");
               pinMode(GPIO2, OUTPUT);
               digitalWrite(GPIO2, LOW);
             }
-            else {
-             
-            }
-          
-
-
-
-
 
             // send message to client
             gSocketServer.sendTXT(num, "coucou ici :)");
@@ -161,25 +132,16 @@ void onServerSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t l
 }
 
 void setup() {
-  delay(2000);
-
-  EEPROM.begin(512);
+  delay(1000);
   
   // démarrage out put série pour debug
   dprint_init(115200);
-  dprintln(F("Booting...."));
 
   // connexion au réseau WiFi
-  autoconnect(false);
-  
+  autoconnect(false);  
 
-  // configuration en tant que AP
-  dprint("Creating soft AP ");
-  dprintln(AP_NAME);
-  WiFi.softAP(AP_NAME, AP_PASS);
-  IPAddress ap_ip = WiFi.softAPIP();
-  dprint("Created soft AP with IP ");
-  dprintln(ap_ip);
+  // creation softAP
+  createSoftAP(SOFTAP_NAME, SOFTAP_PASS);
 
   // démarrage du serveur Web
   gWebServer.on("/", handleRoot);
@@ -191,9 +153,7 @@ void setup() {
   gSocketServer.onEvent(onServerSocketEvent);
   dprintln("WebSocket Server started");
 
-  // démarrage client websocket
-  
-  
+  pinMode(A0, INPUT);
 
   /*
   SPI.begin();           // Init SPI bus
@@ -225,6 +185,15 @@ void loop() {
 
 
   
+  uint32_t read = (uint32_t) analogRead(A0);
+  uint8_t out[4] = {0};
+  out[3] = (read & 0xff000000) >> 24;
+  out[2] = (read & 0xff0000) >> 16;
+  out[1] = (read & 0xff00) >> 8;
+  out[0] = (read & 0xff);
+  gSocketServer.sendBIN(0, out, 4);
+  delay(100);
+  
 
   /*
   // Look for new cards
@@ -243,10 +212,3 @@ void loop() {
   Serial.println();*/
 }
 
-// Helper routine to dump a byte array as hex values to Serial
-void dump_byte_array(byte *buffer, byte bufferSize) {
-  for (byte i = 0; i < bufferSize; i++) {
-    Serial.print(buffer[i] < 0x10 ? " 0" : " ");
-    Serial.print(buffer[i], HEX);
-  }
-}
