@@ -60,10 +60,18 @@
                                     <action selector="onRequestClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="PWF-KT-QCV"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="ANALOG_0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h9P-ji-WYY">
+                                <rect key="frame" x="140" y="241" width="115" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
                     <connections>
+                        <outlet property="lbAnalog" destination="h9P-ji-WYY" id="G17-vc-r7G"/>
                         <outlet property="lbMessage" destination="PqH-Op-6av" id="Ib4-xh-bJQ"/>
                         <outlet property="textfield" destination="5xn-lv-s4d" id="yBn-jl-hFE"/>
                     </connections>

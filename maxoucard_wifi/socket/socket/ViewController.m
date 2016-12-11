@@ -16,6 +16,7 @@
 //@property (nonatomic, strong) SRWebSocket *socket;
 @property (weak, nonatomic) IBOutlet UITextField *textfield;
 @property (weak, nonatomic) IBOutlet UILabel *lbMessage;
+@property (weak, nonatomic) IBOutlet UILabel *lbAnalog;
 
 @end
 
@@ -46,8 +47,6 @@
 - (IBAction)onClientClicked:(id)sender {
     static BOOL on = YES;
     
-    //[[self clientSocket] send:@"WIFI;paprika2;WIFI12Stones"];
-    
     [self.clientSocket send:on ? @"L1" : @"L0"];
     on = !on;
 }
@@ -67,13 +66,25 @@
 }
 - (IBAction)onRequestClicked:(id)sender {
     
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://192.168.4.1:80"]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://192.168.4.1/posts?id=7"]];
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
 
     [NSURLConnection sendAsynchronousRequest:request
                                    queue:queue
                        completionHandler:^(NSURLResponse * _Nullable response, NSData * _Nullable data, NSError * _Nullable connectionError) {
-                                       ;
+
+                           NSLog(@"%@", response);
+                           if([response isKindOfClass:[NSHTTPURLResponse class]]) {
+                               NSHTTPURLResponse * resp = (NSHTTPURLResponse *)response;
+                               if([resp statusCode] == 200 && [[resp MIMEType] isEqualToString:@"application/json"]) {
+                               NSString * body = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                               
+                               NSError * err = nil;
+                               NSArray * json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&err];
+[[self lbMessage] setText:
+                         [[json objectAtIndex:0] objectForKey:@"title"] ];
+                            }
+                           }
                        }];
     
     
@@ -95,15 +106,15 @@
 // ===========================================================================
 - (void)webSocketDidOpen:(PSWebSocket *)webSocket {
     NSLog(@"The websocket handshake completed and is now open!");
-    [webSocket send:@"Hello world!"];
+    [[self lbMessage] setText:[NSString stringWithFormat:@"WebSocket connecté\n%@", webSocket]];
 }
 - (void)webSocket:(PSWebSocket *)webSocket didReceiveMessage:(id)message {
     NSLog(@"The websocket received a message: %@", message);
-//    [[self lbMessage] setText:[NSString stringWithFormat:@"%@\n%@", [[self lbMessage] text], message]];
     if([message isKindOfClass:[NSData class]]) {
-//        unsigned int value = CFSwapInt32BigToHost(*(unsigned int*)([message bytes]));
+
+        
         int value = *(int*)([message bytes]);
-        [[self lbMessage] setText:[NSString stringWithFormat:@"%d", value]];
+        [[self lbAnalog] setText:[NSString stringWithFormat:@"%d", value]];
     }
     else if([message isKindOfClass:[NSString class]]){
         [[self lbMessage] setText:message];

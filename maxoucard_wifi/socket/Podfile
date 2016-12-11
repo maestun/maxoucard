@@ -7,4 +7,5 @@ target 'socket' do
 
   # Pods for socket
   pod 'PocketSocket'
+  pod 'SVProgressHUD'
 end
