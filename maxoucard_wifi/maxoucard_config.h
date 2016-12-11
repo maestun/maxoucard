@@ -1,0 +1,3 @@
+#define SOFTAP_NAME "Borne1"
+#define SOFTAP_PASS "12345678"
+#define AUTOCONNECT_PASS "12345678"

@@ -16,17 +16,17 @@
 #include <EEPROM.h>
 #include "MFRC522.h"
 #include <WebSocketsServer.h>
-
+#include "maxoucard_config.h"
  
 // ===================================================================
 // Configuration
 // ===================================================================
-#define SOFTAP_NAME               "Borne1"
-#define SOFTAP_PASS               "12345678"
+// #define SOFTAP_NAME               "Borne1"
+// #define SOFTAP_PASS               "12345678"
 #define SOFTAP_CHANNEL            11
 #define SOFTAP_HIDE               1
 #define AUTOCONNECT_NAME          SOFTAP_NAME "-Config"
-#define AUTOCONNECT_PASS          "12345678"
+// #define AUTOCONNECT_PASS          "12345678"
 
 #define HTTP_SERVER_PORT          80
 #define SOCKET_SERVER_PORT        81
@@ -258,6 +258,10 @@ void setup() {
   gSocketServer.begin();
   gSocketServer.onEvent(WSOCK_HandleEvent);
   dprintln("WSOCK_SERVER: Started");
+
+
+  // TODO: blink LED to say all OK
+
 
   // TODO: remove
   // debug stuff
