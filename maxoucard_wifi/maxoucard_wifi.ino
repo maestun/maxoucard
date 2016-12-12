@@ -184,12 +184,12 @@ void AC_Autoconnect(bool aForceReset) {
     wifiManager.setConnectTimeout(30); // on va essayer de se connecter à la box pdt xxx secondes
    
     if(aForceReset) { //WiFi.SSID() == "" || digitalRead(PIN_AUTOCONNECT_RESET) == HIGH) {
-        dprintln(F("AUTOCONNECT: Reset settings, please connect to " SOFTAP_NAME " from a browser-enabled device."));
+        dprintln(F("AUTOCONNECT: Reset settings, please connect to " AUTOCONNECT_NAME " from a browser-enabled device."));
         wifiManager.resetSettings();
     }
     
     dprintln(F("AUTOCONNECT: Connecting..."));
-    if(!wifiManager.autoConnect(SOFTAP_NAME, SOFTAP_PASS)) {
+    if(!wifiManager.autoConnect(AUTOCONNECT_NAME, SOFTAP_PASS)) {
         dprintln("AUTOCONNECT: failed to connect and hit timeout");
         delay(3000);
         ESP.reset();
@@ -336,15 +336,14 @@ void loop() {
   gHttpServer.handleClient();
   gSocketServer.loop();
 
-  yield();
-  delay(10);
+  
 
 
   // TODO: remove
   // debug analog 
   
-  uint32_t read = (uint32_t) analogRead(A0);
-  gSocketServer.sendTXT(0, WSOCK_COMMAND_A0 WSOCK_COMMAND_SEPARATOR + String(read) );
+  //uint32_t read = (uint32_t) analogRead(A0);
+  //gSocketServer.sendTXT(0, WSOCK_COMMAND_A0 WSOCK_COMMAND_SEPARATOR + String(read) );
 
   /*
   uint8_t out[4] = {0};
