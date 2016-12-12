@@ -154,32 +154,48 @@ void HTTP_HandleNotFound() {
 // ===================================================================
 // Automatic WiFi configuration
 // ===================================================================
+bool AC_UserReset() {
+    pinMode(PIN_AUTOCONNECT_RESET, INPUT_PULLUP);
+    pinMode(PIN_LED, OUTPUT);
+    delay(2000);
+    
+    // blink LED to tell you can press reset autoconf button
+    bool on = true;
+    for(int i = 0; i < 50; i++) {
+        digitalWrite(PIN_LED, on ? HIGH : LOW);
+        on = !on;
+        delay(200);
+        if(digitalRead(PIN_AUTOCONNECT_RESET) == HIGH) {
+            dprintln("AUTOCONNECT: User reset");
+            digitalWrite(PIN_LED, LOW);
+            return true;
+        }
+    }
+    return false;
+}
+
+
+
 // Tries to connect to previously saved AP (unless reset pin is high).
 // If no previous configuration found, this will create a softAP named AUTOCONNECT_NAME.
 // Then, connect any browser-enabled device to this softAP, and configure your AP.
-void AC_Autoconnect() {
-    dprintln(F("AUTOCONNECT: Connecting..."));
+void AC_Autoconnect(bool aForceReset) {
     WiFiManager wifiManager;
-    wifiManager.setDebugOutput(true);
-
-    pinMode(PIN_LED, OUTPUT);
-    pinMode(PIN_AUTOCONNECT_RESET, INPUT_PULLUP);
-
-    delay(200);
-    
-    digitalWrite(PIN_LED, LOW);
+    wifiManager.setConnectTimeout(30); // on va essayer de se connecter à la box pdt xxx secondes
    
-    if(WiFi.SSID() == "" || digitalRead(PIN_AUTOCONNECT_RESET) == HIGH) {
-        digitalWrite(PIN_LED, HIGH);
-        dprintln(F("AUTOCONNECT: Reset settings, please connect to " AUTOCONNECT_NAME " from a browser-enabled device."));
+    if(aForceReset) { //WiFi.SSID() == "" || digitalRead(PIN_AUTOCONNECT_RESET) == HIGH) {
+        dprintln(F("AUTOCONNECT: Reset settings, please connect to " SOFTAP_NAME " from a browser-enabled device."));
         wifiManager.resetSettings();
-        wifiManager.autoConnect(AUTOCONNECT_NAME, SOFTAP_PASS);
-        dprintln(F("AUTOCONNECT: END"));
     }
-    else {
-        wifiManager.autoConnect(SOFTAP_NAME, SOFTAP_PASS);
-    }
-    digitalWrite(PIN_LED, LOW);
+    
+    dprintln(F("AUTOCONNECT: Connecting..."));
+    if(!wifiManager.autoConnect(SOFTAP_NAME, SOFTAP_PASS)) {
+        dprintln("AUTOCONNECT: failed to connect and hit timeout");
+        delay(3000);
+        ESP.reset();
+        delay(5000);
+    } 
+
     // wifiManager.setConnectTimeout(45);
     // wifiManager.setAPCallback(AC_APCallback);
     // wifiManager.setSaveConfigCallback(AC_SaveCallback);
@@ -267,7 +283,7 @@ void setup() {
   dprint_init(115200);
 
   // connexion au réseau WiFi
-  AC_Autoconnect();  
+  AC_Autoconnect(AC_UserReset());
 
   // creation softAP
   createSoftAP();
@@ -320,6 +336,7 @@ void loop() {
   gHttpServer.handleClient();
   gSocketServer.loop();
 
+  yield();
   delay(10);
 
 
@@ -327,14 +344,16 @@ void loop() {
   // debug analog 
   
   uint32_t read = (uint32_t) analogRead(A0);
-  gSocketServer.sendTXT(0, WSOCK_COMMAND_A0 WSOCK_COMMAND_SEPARATOR );
+  gSocketServer.sendTXT(0, WSOCK_COMMAND_A0 WSOCK_COMMAND_SEPARATOR + String(read) );
 
+  /*
   uint8_t out[4] = {0};
   out[3] = (read & 0xff000000) >> 24;
   out[2] = (read & 0xff0000) >> 16;
   out[1] = (read & 0xff00) >> 8;
   out[0] = (read & 0xff);
   gSocketServer.sendBIN(0, out, 4);
+  */
   
   /*
 
