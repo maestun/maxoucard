@@ -9,6 +9,7 @@
 #import "RootVC.h"
 #import "SettingsVC.h"
 #import "ClientVC.h"
+#import "MenuVC.h"
 
 @implementation RootVC
 
@@ -35,11 +36,13 @@
     
     
     // settings
-    SettingsVC * settings = [[self storyboard] instantiateViewControllerWithIdentifier:@"idSettingsVC"];
-    [self setLeftMenuViewController:settings];
+//    SettingsVC * settings = [[self storyboard] instantiateViewControllerWithIdentifier:@"idSettingsVC"];
+//    [self setLeftMenuViewController:settings];
+    MenuVC * menu = [[self storyboard] instantiateViewControllerWithIdentifier:@"idMenuVC"];
+    [self setLeftMenuViewController:menu];
     
-    ClientVC * client = (ClientVC *)[nc topViewController];
-    [settings setDeviceDelegate:client];
+//    ClientVC * client = (ClientVC *)[nc topViewController];
+//    [settings setDeviceDelegate:client];
 }
 
 

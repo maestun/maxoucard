@@ -5,6 +5,7 @@
 ## Build generated
 build/
 DerivedData/
+maxoucard_wifi/build/
 
 ## Various settings
 *.pbxuser

@@ -17,6 +17,15 @@ PODS:
   - ChameleonFramework (2.0.4):
     - ChameleonFramework/Default (= 2.0.4)
   - ChameleonFramework/Default (2.0.4)
+  - PocketSocket (1.0.1):
+    - PocketSocket/Client (= 1.0.1)
+    - PocketSocket/Core (= 1.0.1)
+    - PocketSocket/Server (= 1.0.1)
+  - PocketSocket/Client (1.0.1):
+    - PocketSocket/Core
+  - PocketSocket/Core (1.0.1)
+  - PocketSocket/Server (1.0.1):
+    - PocketSocket/Client
   - RESideMenu (4.0.7)
   - SDWebImage (3.8.2):
     - SDWebImage/Core (= 3.8.2)
@@ -26,6 +35,7 @@ PODS:
 DEPENDENCIES:
   - AFNetworking (~> 3.0)
   - ChameleonFramework
+  - PocketSocket
   - RESideMenu
   - SDWebImage (~> 3.8)
   - SVProgressHUD
@@ -33,10 +43,11 @@ DEPENDENCIES:
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
   ChameleonFramework: 5abe69b1f2a6cc79c3c435fcd9d3d855748225ee
+  PocketSocket: 9c6867d66fb4f962af96b9b07f4b45bb561b2c2a
   RESideMenu: f24c508404b49c667344c54aba7e590883533958
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
   SVProgressHUD: c404a55d78acbeb7ebb78b76d3faf986475a6994
 
-PODFILE CHECKSUM: f242df91f2cfb195004471770380564a84dc5d77
+PODFILE CHECKSUM: 79382f469addce4f91eac21bc56a0b1d879aa1d5
 
 COCOAPODS: 1.1.1

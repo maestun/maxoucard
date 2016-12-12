@@ -3,20 +3,23 @@
 // ===================================================================
 /*
 - tester dongle NFC
-- dans la config de la borne, virer les options inutiles
-- configurer l'URL du HOST par WebSocket
+- tester bouton reset softAP
+- bugfix: save AP into eeprom
+- optimiser la redirection pour recevoir de gros flux de data sans planter :p
+- dans le popup de config de la borne, virer les boutons inutiles
+- configurer l'URL du HOST (serveur BDD distant) par WebSocket
+- cacher le SSID de la softAP ?
+- exposer l'url du websoket d'une façon ou d'une autre :p [DONE] c'est routeur, IP facile à récupérer
 */
-
-
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h> 
 #include <ESP8266WebServer.h>
 #include <WiFiManager.h>
 #include <SPI.h>
-#include <EEPROM.h>
 #include "MFRC522.h"
 #include <WebSocketsServer.h>
 #include "maxoucard_config.h"
+#include "wsock_commands.h"
  
 // ===================================================================
 // Configuration
@@ -26,13 +29,12 @@
 #define SOFTAP_CHANNEL            11
 #define SOFTAP_HIDE               1
 #define AUTOCONNECT_NAME          SOFTAP_NAME "-Config"
-// #define AUTOCONNECT_PASS          "12345678"
 
 #define HTTP_SERVER_PORT          80
 #define SOCKET_SERVER_PORT        81
 
-#define PIN_AUTOCONNECT_RESET     13
-#define PIN_GPIO2                 2
+#define PIN_AUTOCONNECT_RESET     14 // marked 'GPIO14' on ESP-12 module
+#define PIN_LED                   2
 /* wiring the MFRC522 to ESP8266 (ESP-12)
 RST     = GPIO5
 SDA(SS) = GPIO4 
@@ -155,19 +157,37 @@ void HTTP_HandleNotFound() {
 // Tries to connect to previously saved AP (unless reset pin is high).
 // If no previous configuration found, this will create a softAP named AUTOCONNECT_NAME.
 // Then, connect any browser-enabled device to this softAP, and configure your AP.
-void autoconnect() {
+void AC_Autoconnect() {
     dprintln(F("AUTOCONNECT: Connecting..."));
     WiFiManager wifiManager;
+    wifiManager.setDebugOutput(true);
+
+    pinMode(PIN_LED, OUTPUT);
     pinMode(PIN_AUTOCONNECT_RESET, INPUT_PULLUP);
-    if(digitalRead(PIN_AUTOCONNECT_RESET) == HIGH) {
+
+    delay(200);
+    
+    digitalWrite(PIN_LED, LOW);
+   
+    if(WiFi.SSID() == "" || digitalRead(PIN_AUTOCONNECT_RESET) == HIGH) {
+        digitalWrite(PIN_LED, HIGH);
         dprintln(F("AUTOCONNECT: Reset settings, please connect to " AUTOCONNECT_NAME " from a browser-enabled device."));
         wifiManager.resetSettings();
+        wifiManager.autoConnect(AUTOCONNECT_NAME, SOFTAP_PASS);
+        dprintln(F("AUTOCONNECT: END"));
     }
-    wifiManager.autoConnect(AUTOCONNECT_NAME, AUTOCONNECT_PASS);
+    else {
+        wifiManager.autoConnect(SOFTAP_NAME, SOFTAP_PASS);
+    }
+    digitalWrite(PIN_LED, LOW);
+    // wifiManager.setConnectTimeout(45);
+    // wifiManager.setAPCallback(AC_APCallback);
+    // wifiManager.setSaveConfigCallback(AC_SaveCallback);
     dprint(F("AUTOCONNECT: Connected to "));
     dprint(WiFi.SSID());
     dprint(F(", IP: "));
     dprintln(WiFi.localIP());
+    
 }
 
 
@@ -187,8 +207,9 @@ void createSoftAP() {
 
     dprint(F("SOFT_AP: Created soft AP with IP "));
     dprintln(WiFi.softAPIP());
-}
 
+    delay(1000);
+}
 
 
 // ===================================================================
@@ -213,14 +234,17 @@ void WSOCK_HandleEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t len
             gBuffer[i] = payload[i];
         }
         gBuffer[lenght] = '\0';
-
-        if(!strcmp(gBuffer, "L1")) {
+        if(!strcmp(gBuffer, WSOCK_COMMAND_REMOTE)) {
+            // just reply
+            gSocketServer.sendTXT(num, WSOCK_COMMAND_REMOTE WSOCK_COMMAND_SEPARATOR WSOCK_OK);
+        }
+        else if(!strcmp(gBuffer, "L1")) {
             dprintln("led ON!!!");
-            digitalWrite(PIN_GPIO2, HIGH);
+            digitalWrite(PIN_LED, HIGH);
         }
         else if(!strcmp(gBuffer,"L0")) {
             dprintln("led OFF!!!");
-            digitalWrite(PIN_GPIO2, LOW);
+            digitalWrite(PIN_LED, LOW);
         }
 
         // send message to client
@@ -243,7 +267,7 @@ void setup() {
   dprint_init(115200);
 
   // connexion au réseau WiFi
-  autoconnect();  
+  AC_Autoconnect();  
 
   // creation softAP
   createSoftAP();
@@ -266,7 +290,7 @@ void setup() {
   // TODO: remove
   // debug stuff
   pinMode(A0, INPUT);
-  pinMode(PIN_GPIO2, OUTPUT);
+  
 
   /*
   SPI.begin();           // Init SPI bus
@@ -288,6 +312,7 @@ void setup() {
   Serial.println(F("======================================================")); 
   Serial.println(F("Scan for Card and print UID:"));
   */
+
 }
 
 void loop() {
@@ -302,6 +327,8 @@ void loop() {
   // debug analog 
   
   uint32_t read = (uint32_t) analogRead(A0);
+  gSocketServer.sendTXT(0, WSOCK_COMMAND_A0 WSOCK_COMMAND_SEPARATOR );
+
   uint8_t out[4] = {0};
   out[3] = (read & 0xff000000) >> 24;
   out[2] = (read & 0xff0000) >> 16;

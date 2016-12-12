@@ -19,6 +19,9 @@
 		09A5C0DE1DFADC93002A9C19 /* GenericUserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 09A5C0DD1DFADC93002A9C19 /* GenericUserView.m */; };
 		09A5C0E11DFADCAB002A9C19 /* GenericUserView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 09A5C0E01DFADCAB002A9C19 /* GenericUserView.xib */; };
 		09A5C0E41DFAE957002A9C19 /* GenericUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 09A5C0E31DFAE957002A9C19 /* GenericUser.m */; };
+		09B5A5B41DFD776C00BD03AE /* SocketManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 09B5A5B31DFD776C00BD03AE /* SocketManager.m */; };
+		09B5A5B71DFDBB3B00BD03AE /* MenuVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 09B5A5B61DFDBB3B00BD03AE /* MenuVC.m */; };
+		09B5A5BA1DFDBE0300BD03AE /* RouterAndRoutes.m in Sources */ = {isa = PBXBuildFile; fileRef = 09B5A5B91DFDBE0300BD03AE /* RouterAndRoutes.m */; };
 		09F796081DF9B6CF002EA2B8 /* BLEManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 09F796071DF9B6CF002EA2B8 /* BLEManager.m */; };
 		09F7960C1DF9B73A002EA2B8 /* SerialGATT.m in Sources */ = {isa = PBXBuildFile; fileRef = 09F7960A1DF9B73A002EA2B8 /* SerialGATT.m */; };
 		09F7960F1DF9B970002EA2B8 /* RootVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 09F7960E1DF9B970002EA2B8 /* RootVC.m */; };
@@ -50,6 +53,12 @@
 		09A5C0E01DFADCAB002A9C19 /* GenericUserView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = GenericUserView.xib; path = views/GenericUserView.xib; sourceTree = "<group>"; };
 		09A5C0E21DFAE957002A9C19 /* GenericUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GenericUser.h; path = entities/GenericUser.h; sourceTree = "<group>"; };
 		09A5C0E31DFAE957002A9C19 /* GenericUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GenericUser.m; path = entities/GenericUser.m; sourceTree = "<group>"; };
+		09B5A5B21DFD776C00BD03AE /* SocketManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SocketManager.h; path = net/SocketManager.h; sourceTree = "<group>"; };
+		09B5A5B31DFD776C00BD03AE /* SocketManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SocketManager.m; path = net/SocketManager.m; sourceTree = "<group>"; };
+		09B5A5B51DFDBB3B00BD03AE /* MenuVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MenuVC.h; path = controllers/MenuVC.h; sourceTree = "<group>"; };
+		09B5A5B61DFDBB3B00BD03AE /* MenuVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MenuVC.m; path = controllers/MenuVC.m; sourceTree = "<group>"; };
+		09B5A5B81DFDBE0300BD03AE /* RouterAndRoutes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RouterAndRoutes.h; path = net/RouterAndRoutes.h; sourceTree = "<group>"; };
+		09B5A5B91DFDBE0300BD03AE /* RouterAndRoutes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RouterAndRoutes.m; path = net/RouterAndRoutes.m; sourceTree = "<group>"; };
 		09F796061DF9B6CF002EA2B8 /* BLEManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BLEManager.h; path = ble/BLEManager.h; sourceTree = "<group>"; };
 		09F796071DF9B6CF002EA2B8 /* BLEManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BLEManager.m; path = ble/BLEManager.m; sourceTree = "<group>"; };
 		09F7960A1DF9B73A002EA2B8 /* SerialGATT.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SerialGATT.m; path = ble/SerialGATT.m; sourceTree = "<group>"; };
@@ -143,6 +152,8 @@
 				0911567A1DF9A50C008AF936 /* SettingsVC.m */,
 				09F7960D1DF9B970002EA2B8 /* RootVC.h */,
 				09F7960E1DF9B970002EA2B8 /* RootVC.m */,
+				09B5A5B51DFDBB3B00BD03AE /* MenuVC.h */,
+				09B5A5B61DFDBB3B00BD03AE /* MenuVC.m */,
 			);
 			name = controllers;
 			sourceTree = "<group>";
@@ -189,8 +200,12 @@
 		09F796101DF9C547002EA2B8 /* net */ = {
 			isa = PBXGroup;
 			children = (
+				09B5A5B81DFDBE0300BD03AE /* RouterAndRoutes.h */,
+				09B5A5B91DFDBE0300BD03AE /* RouterAndRoutes.m */,
 				09F796111DF9C55B002EA2B8 /* ServerManager.h */,
 				09F796121DF9C55B002EA2B8 /* ServerManager.m */,
+				09B5A5B21DFD776C00BD03AE /* SocketManager.h */,
+				09B5A5B31DFD776C00BD03AE /* SocketManager.m */,
 			);
 			name = net;
 			sourceTree = "<group>";
@@ -342,8 +357,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				09B5A5B41DFD776C00BD03AE /* SocketManager.m in Sources */,
 				09F796131DF9C55B002EA2B8 /* ServerManager.m in Sources */,
+				09B5A5BA1DFDBE0300BD03AE /* RouterAndRoutes.m in Sources */,
 				091156741DF9A49B008AF936 /* ClientVC.m in Sources */,
+				09B5A5B71DFDBB3B00BD03AE /* MenuVC.m in Sources */,
 				091156801DF9A89A008AF936 /* ACUtils.m in Sources */,
 				09A5C0DE1DFADC93002A9C19 /* GenericUserView.m in Sources */,
 				09F796081DF9B6CF002EA2B8 /* BLEManager.m in Sources */,

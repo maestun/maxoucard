@@ -10,5 +10,6 @@ target 'maxoucard_app' do
   pod 'AFNetworking', '~> 3.0'
   pod 'RESideMenu'
   pod 'SVProgressHUD'
+  pod 'PocketSocket'
 end
 
