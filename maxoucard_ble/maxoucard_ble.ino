@@ -185,7 +185,7 @@ void loop() {
         if(gRC522.PICC_ReadCardSerial()) {
             // Dump debug info about the card. PICC_HaltA() is automatically called.
             dprintln("Read card");
-            gRC522.PICC_DumpToSerial(&(gRC522.uid));
+            // gRC522.PICC_DumpToSerial(&(gRC522.uid));
             sendUID(gRC522.uid.uidByte, gRC522.uid.size);
             if(HM10_ReadACK()) {
                 // all ok

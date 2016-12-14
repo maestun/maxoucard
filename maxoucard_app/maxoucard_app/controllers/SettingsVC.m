@@ -187,6 +187,9 @@ static volatile BOOL            sRefreshing = NO;
 }
 - (void)ble:(BLEManager *)aManager didReceiveNFCID:(NSString *)aNFCID {
     
+    // comm server
+    [ServerManager getUserFromNFCID:aNFCID delegate:self];
+
 }
 - (void)ble:(BLEManager *)aManager error:(NSError *)aError {
     [SVProgressHUD showErrorWithStatus:@"Veuillez activer le Bluetooth dans Réglages."];
@@ -228,6 +231,7 @@ static volatile BOOL            sRefreshing = NO;
 
 - (void)onGetUserFromNFCID:(NSString *)aNFCID user:(GenericUser *)aUser withError:(NSError *)aError {
     // TODO:
+    
 }
 
 
