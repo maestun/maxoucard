@@ -180,10 +180,10 @@ static volatile BOOL            sRefreshing = NO;
     [[self tvDevices] reloadData];
 }
 - (void)bleDidStartScan:(BLEManager *)aManager {
-    [[self btScan] setEnabled:NO];
+    [self refreshScanUI:YES];
 }
 - (void)bleDidStopScan:(BLEManager *)aManager {
-    [[self btScan] setEnabled:YES];
+    [self refreshScanUI:NO];
 }
 - (void)ble:(BLEManager *)aManager didReceiveNFCID:(NSString *)aNFCID {
     
@@ -312,7 +312,7 @@ static volatile BOOL            sRefreshing = NO;
     [tableView deselectRowAtIndexPath:indexPath animated: true];
     
     if([tableView tag] == TAG_DEVICES) {
-        [self stopScan];
+        [self refreshScanUI:NO];
         CBPeripheral * p = [[[BLEManager instance] peripherals] objectAtIndex:[indexPath row]];
         [[BLEManager instance] connectToPeripheral:p];
     }
@@ -332,9 +332,12 @@ static volatile BOOL            sRefreshing = NO;
     [ServerManager getAllUsers:self];
 }
 
-- (void)stopScan {
-    sScanning = NO;
-    [mRefreshDevices endRefreshing];
+- (void)refreshScanUI:(BOOL)aIsScanning {
+    sScanning = aIsScanning;
+    [[self btScan] setEnabled:!aIsScanning];
+    if(aIsScanning == NO) {
+        [mRefreshDevices endRefreshing];
+    }
 }
 
 

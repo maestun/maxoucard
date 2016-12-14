@@ -20,7 +20,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *btSettings;
 @property (weak, nonatomic) IBOutlet UIImageView *ivBackground;
 @property (weak, nonatomic) IBOutlet GenericUserView *gvUser;
-
 @end
 
 
@@ -43,7 +42,10 @@ static UIImage * sDisconnected = nil;
     
     [[self btSettings] setImage:sDisconnected forState:UIControlStateNormal];
 
-        [[BLEManager instance] registerDelegate:self];
+    [[BLEManager instance] registerDelegate:self];
+    
+    NSURLRequest * req = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://192.168.1.32:3000/"]];
+    [[self wvMain] loadRequest:req];
 }
 
 
