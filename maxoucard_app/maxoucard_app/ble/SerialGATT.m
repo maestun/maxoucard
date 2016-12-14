@@ -69,6 +69,7 @@
 -(void) scanTimer:(NSTimer *)timer
 {
     [manager stopScan];
+    [[self delegate] scanStop];
 }
 
 /*

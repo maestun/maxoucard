@@ -58,6 +58,15 @@ static SocketManager * sInstance = nil;
 }
 
 
+- (void)configureAPSSID:(NSString *)aSSID pass:(NSString *)aPass {
+    NSString * str = [NSString stringWithFormat:@"%@%@%@%@%@",
+                      STRINGIFY(WSOCK_COMMAND_AP), STRINGIFY(WSOCK_COMMAND_SEPARATOR), aSSID,
+                      STRINGIFY(WSOCK_COMMAND_SEPARATOR), aPass];
+    [[self clientSocket] send:str];
+}
+
+
+
 // ===========================================================================
 #pragma mark - PSWebSocketDelegate
 // ===========================================================================

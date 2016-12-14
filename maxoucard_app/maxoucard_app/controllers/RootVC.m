@@ -36,13 +36,14 @@
     
     
     // settings
-//    SettingsVC * settings = [[self storyboard] instantiateViewControllerWithIdentifier:@"idSettingsVC"];
-//    [self setLeftMenuViewController:settings];
-    MenuVC * menu = [[self storyboard] instantiateViewControllerWithIdentifier:@"idMenuVC"];
-    [self setLeftMenuViewController:menu];
-    
+    SettingsVC * settings = [[self storyboard] instantiateViewControllerWithIdentifier:@"idSettingsVC"];
+    [self setLeftMenuViewController:settings];
 //    ClientVC * client = (ClientVC *)[nc topViewController];
 //    [settings setDeviceDelegate:client];
+
+//    MenuVC * menu = [[self storyboard] instantiateViewControllerWithIdentifier:@"idMenuVC"];
+//    [self setLeftMenuViewController:menu];
+    
 }
 
 

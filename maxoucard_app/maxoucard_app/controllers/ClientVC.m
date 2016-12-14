@@ -42,6 +42,8 @@ static UIImage * sDisconnected = nil;
     sDisconnected = [ACUtils tintedImageWithColor:FlatGray image:[UIImage imageNamed:@"gears"]];
     
     [[self btSettings] setImage:sDisconnected forState:UIControlStateNormal];
+
+        [[BLEManager instance] registerDelegate:self];
 }
 
 
@@ -54,6 +56,11 @@ static UIImage * sDisconnected = nil;
 
 - (IBAction)onSettingsClicked:(id)sender {
 
+#ifdef DEBUG
+    [[self sideMenuViewController] setContentViewInLandscapeOffsetCenterX:(CGRectGetWidth([[self view] frame]) / 2) - 60];
+    [super presentLeftMenuViewController:sender];
+#else
+    
     UIAlertController * ac = [UIAlertController alertControllerWithTitle:@"Administration" message:@"Veuillez entrer le mot de passe:" preferredStyle:UIAlertControllerStyleAlert];
     [ac addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
         [textField setSecureTextEntry:YES];
@@ -63,7 +70,7 @@ static UIImage * sDisconnected = nil;
         
         
         // TODO: disable no passwd !!
-        if(YES || [passwd isEqualToString:[Config getPassword]]) {
+        if([passwd isEqualToString:[Config getPassword]]) {
             [[self sideMenuViewController] setContentViewInLandscapeOffsetCenterX:(CGRectGetWidth([[self view] frame]) / 2) - 60];
             [super presentLeftMenuViewController:sender];
         }
@@ -74,7 +81,7 @@ static UIImage * sDisconnected = nil;
     [self presentViewController:ac animated:YES completion:^{
         
     }];
-
+#endif
 }
 
 
@@ -83,7 +90,7 @@ static UIImage * sDisconnected = nil;
 - (IBAction)onConnectClicked:(id)sender {
 
     ConnectVC * vc = [[self storyboard] instantiateViewControllerWithIdentifier:@"idConnectVC"];
-    [self setDeviceDelegate:vc];
+//    [self setDeviceDelegate:vc];
     
     if([[self gvUser] user]) {
         [vc setUserLeft:[[self gvUser] user]];
@@ -95,28 +102,18 @@ static UIImage * sDisconnected = nil;
 
 
 // ============================================================================
-#pragma mark - DeviceDataDelegate
+#pragma mark - BLEManagerDelegate
 // ============================================================================
-- (void)onNFCIDReceived:(NSString *)aNFCID {
-    // data shound be NFC ID
-    [SVProgressHUD showProgress:-1 status:@"Récupération de vos informations..."];
-    
-    UIViewController * top = [[self navigationController] topViewController];
-    if(top == self) {
-        [ServerManager getUserFromNFCID:aNFCID delegate:self];
-    }
-    else {
-        if([top isKindOfClass:[ConnectVC class]]) {
-            ConnectVC * connect = (ConnectVC *)top;
-            [connect onNFCIDReceived:aNFCID];
-        }
-    }
+- (void)ble:(BLEManager *)aManager didDisconnectfromPeripheral:(CBPeripheral *)aPeripheral {
+    [[self btSettings] setImage:sDisconnected forState:UIControlStateNormal];
 }
-- (void)didConnect {
+- (void)ble:(BLEManager *)aManager didConnectToPeripheral:(CBPeripheral *)aPeripheral {
     [[self btSettings] setImage:sConnected forState:UIControlStateNormal];
 }
--(void)didDisconnect {
-    [[self btSettings] setImage:sDisconnected forState:UIControlStateNormal];
+- (void)ble:(BLEManager *)aManager didReceiveNFCID:(NSString *)aNFCID {
+    // data shound be NFC ID
+    [SVProgressHUD showProgress:-1 status:@"Récupération de vos informations..."];
+    [ServerManager getUserFromNFCID:aNFCID delegate:self];
 }
 
 

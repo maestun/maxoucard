@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "GenericUserView.h"
-#import "SettingsVC.h"
+#import "ServerManager.h"
+#import "BLEManager.h"
 
-@interface ConnectVC : UIViewController <DeviceDataDelegate, ServerManagerDelegate>
+@interface ConnectVC : UIViewController <BLEManagerDelegate, ServerManagerDelegate>
 @property (weak, nonatomic) IBOutlet GenericUserView *gvLeft;
 @property (weak, nonatomic) IBOutlet GenericUserView *gvRight;
 

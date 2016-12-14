@@ -1,11 +1,11 @@
 #include <SoftwareSerial.h>
 #include <Wire.h> 
+#include "ble_commands.h"
+#include "maxoucard_config.h"
 
 // ===================================================================
 // Configuration
 // ===================================================================
-#define BLE_NAME          "Borne1"    // nom du device bluetooth, doit être unique !
-#define BLE_PASS          "123456"
 // #define NO_SERIAL                  // décommenter pour debug série
 #define PIN_DEBUG_BUTTON  2
 #define PIN_DEBUG_BUTTON2 3
@@ -33,23 +33,31 @@
 #define PIN_BLE_TX        8
 SoftwareSerial            gBLE(PIN_BLE_TX, PIN_BLE_RX);
 #define BLE_DELAY_MS      500
-#define BLE_SEPARATOR     ";"
-#define BLE_ENDLINE       "."
 
 // data format is: NFC<separator><NFC_ID_STRING>
 bool HM10_SendData(char * aData) {
 
-  gBLE.write("NFC");
-  gBLE.write(BLE_SEPARATOR);
+  gBLE.write(BLE_COMMAND_NFC);
+  gBLE.write(BLE_COMMAND_SEPARATOR);
   
   int len = strlen(aData);
   for(char i = 0; i < len; i++) {
     gBLE.write(aData[i]);
   }
   
-  gBLE.write(BLE_ENDLINE);
+  gBLE.write(BLE_COMMAND_TERMINATOR);
   dprint(F("sending NFC: "));
   dprintln(aData);
+}
+
+
+bool HM10_ReadACK() {
+    String ret = gBLE.readString();
+
+    // TODO: lire le retour w/ timeout
+
+    return true;
+    
 }
 
 
@@ -81,10 +89,43 @@ bool HM10_ConnectToMaster() {
   dprintln(gBLE.readString());
 
   // set pin
-  gBLE.write("AT+PASS" BLE_PASS);
+  gBLE.write("AT+PASS" BLE_PIN);
   delay(BLE_DELAY_MS);
   dprint(F("BLE pin: "));
   dprintln(gBLE.readString());
+
+
+
+  // get mode (should be 0)
+  gBLE.write("AT+MODE?");
+  delay(BLE_DELAY_MS);
+  dprint(F("BLE mode: "));
+  dprintln(gBLE.readString());
+
+
+  // get role (should be 0=peripheral)
+  gBLE.write("AT+ROLE?");
+  delay(BLE_DELAY_MS);
+  dprint(F("BLE role: "));
+  dprintln(gBLE.readString());
+
+
+  gBLE.write("AT+SHOW?");
+  delay(BLE_DELAY_MS);
+  dprint(F("BLE show: "));
+  dprintln(gBLE.readString());
+
+  gBLE.write("AT+TEMP?");
+  delay(BLE_DELAY_MS);
+  dprint(F("BLE temp: "));
+  dprintln(gBLE.readString());
+
+  gBLE.write("AT+TYPE2"); // ask pin
+  delay(BLE_DELAY_MS);
+  dprint(F("BLE bond type: "));
+  dprintln(gBLE.readString());
+
+  dprint(F("Config done."));
 }
 
 
@@ -110,15 +151,27 @@ void setup() {
 void loop() {
 
   // scan NFC (TODO:)
+  /*
   if(digitalRead(PIN_DEBUG_BUTTON) == HIGH) {
     dprintln(F("debug button!"));
     HM10_SendData("DUMMY_NFC_ID");
   }
-  if(digitalRead(PIN_DEBUG_BUTTON2) == HIGH) {
+  */
+  if(digitalRead(PIN_DEBUG_BUTTON2) == LOW) {
     dprintln(F("debug button 2!"));
+    String str = String(BLE_COMMAND_NFC) + String(BLE_COMMAND_SEPARATOR) + "OLIVIER_NFC_ID";
     HM10_SendData("OLIVIER_NFC_ID");
+
+    if(HM10_ReadACK()) {
+        // all ok
+        
+    }
+    else {
+        // no ACK after timeout, re-send
+    }
+    
   }
 
   // teh wait !
-  delay(500);
+  delay(100);
 }

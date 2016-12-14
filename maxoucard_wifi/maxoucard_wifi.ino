@@ -3,13 +3,13 @@
 // ===================================================================
 /*
 - tester dongle NFC
-- tester bouton reset softAP
+- [DONE] tester bouton reset softAP 
 - bugfix: save AP into eeprom
 - optimiser la redirection pour recevoir de gros flux de data sans planter :p
 - dans le popup de config de la borne, virer les boutons inutiles
 - configurer l'URL du HOST (serveur BDD distant) par WebSocket
 - cacher le SSID de la softAP ?
-- exposer l'url du websoket d'une façon ou d'une autre :p [DONE] c'est routeur, IP facile à récupérer
+- [DONE] exposer l'url du websoket d'une façon ou d'une autre :p (c'est routeur, IP facile à récupérer)
 */
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h> 
@@ -87,6 +87,7 @@ bool waitResponseUntilTimeout(int aTimeoutMS) {
 
 
 void HTTP_HandleRoot() {
+    dprint(F("HTTP_SERVER: root"));
     gHttpServer.send(200, "text/html", "<h1>Hello World, " SOFTAP_NAME " !</h1>");
 }
 
@@ -181,7 +182,8 @@ bool AC_UserReset() {
 // Then, connect any browser-enabled device to this softAP, and configure your AP.
 void AC_Autoconnect(bool aForceReset) {
     WiFiManager wifiManager;
-    wifiManager.setConnectTimeout(30); // on va essayer de se connecter à la box pdt xxx secondes
+    wifiManager.setConnectTimeout(30); // on va essayer de se connecter à la box 
+                                       // précédemment sauvegardée en eeprom pdt xxx secondes
    
     if(aForceReset) { //WiFi.SSID() == "" || digitalRead(PIN_AUTOCONNECT_RESET) == HIGH) {
         dprintln(F("AUTOCONNECT: Reset settings, please connect to " AUTOCONNECT_NAME " from a browser-enabled device."));
@@ -203,7 +205,7 @@ void AC_Autoconnect(bool aForceReset) {
     dprint(WiFi.SSID());
     dprint(F(", IP: "));
     dprintln(WiFi.localIP());
-    
+    digitalWrite(PIN_LED, HIGH );
 }
 
 
@@ -215,7 +217,7 @@ void createSoftAP() {
     dprint(F("SOFT_AP: Creating soft AP "));
     dprintln(SOFTAP_NAME);
     // set both access point and station
-    WiFi.mode(WIFI_AP_STA);
+    // WiFi.mode(WIFI_AP_STA);
   
     // create soft AP
     WiFi.softAP(SOFTAP_NAME, SOFTAP_PASS);
@@ -337,8 +339,6 @@ void loop() {
   gSocketServer.loop();
 
   
-
-
   // TODO: remove
   // debug analog 
   

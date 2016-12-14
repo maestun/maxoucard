@@ -75,17 +75,23 @@ static EWaitState sWaitState = EWaitNone;
     
 }
 
+
 // ============================================================================
-#pragma mark - DeviceDataDelegate
+#pragma mark - BLEManagerDelegate
 // ============================================================================
-- (void)onNFCIDReceived:(NSString *)aNFCID {
+- (void)bleDidStopScan:(BLEManager *)aManager {
+    
+}
+- (void)ble:(BLEManager *)aManager didDisconnectfromPeripheral:(CBPeripheral *)aPeripheral {
+//    [[self btSettings] setImage:sDisconnected forState:UIControlStateNormal];
+}
+- (void)ble:(BLEManager *)aManager didConnectToPeripheral:(CBPeripheral *)aPeripheral {
+//    [[self btSettings] setImage:sConnected forState:UIControlStateNormal];
+}
+- (void)ble:(BLEManager *)aManager didReceiveNFCID:(NSString *)aNFCID {
     // data shound be NFC ID
     [SVProgressHUD showProgress:-1 status:@"Récupération de vos informations..."];
     [ServerManager getUserFromNFCID:aNFCID delegate:self];
-}
-- (void)didConnect {
-}
--(void)didDisconnect {
 }
 
 

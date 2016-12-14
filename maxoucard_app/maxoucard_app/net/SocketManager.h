@@ -24,4 +24,5 @@
 - (void)sendMessage:(NSString *)aMessage;
 - (void)closeSocket;
 - (void)registerDelegate:(id<SocketManagerDelegate>)aDelegate;
+- (void)configureAPSSID:(NSString *)aSSID pass:(NSString *)aPass;
 @end

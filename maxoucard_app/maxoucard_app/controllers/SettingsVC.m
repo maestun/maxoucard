@@ -47,7 +47,7 @@ static volatile BOOL            sRefreshing = NO;
     
     mRefreshDevices = [[UIRefreshControl alloc] init];
     [[self tvDevices] addSubview:mRefreshDevices];
-    [mRefreshDevices addTarget:self action:@selector(startScan) forControlEvents:UIControlEventValueChanged];
+    [mRefreshDevices addTarget:[BLEManager instance] action:@selector(startScan) forControlEvents:UIControlEventValueChanged];
     
     
     mRefreshUsers = [[UIRefreshControl alloc] init];
@@ -57,16 +57,13 @@ static volatile BOOL            sRefreshing = NO;
 
     [[self tfServerURL] setText:[Config getServerURL]];
     
-    mSensor = [[SerialGATT alloc] init];
-    [mSensor setup];
-    [mSensor setDelegate:self];
-    
-    mPeripherals = [[NSMutableArray alloc] init];
+
+    [[BLEManager instance] registerDelegate:self];
     
     [ServerManager getAllUsers:self];
     
     // start scan w/ some delay or CoreBluetooth won't be initialized !
-    [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(startScan) userInfo:nil repeats:NO];
+    [NSTimer scheduledTimerWithTimeInterval:1 target:[BLEManager instance] selector:@selector(startScan) userInfo:nil repeats:NO];
 
 }
 
@@ -82,7 +79,7 @@ static volatile BOOL            sRefreshing = NO;
 
 
 - (IBAction)onScanClicked:(id)sender {
-    [self startScan];
+    [[BLEManager instance] startScan];
 }
 
 
@@ -169,6 +166,34 @@ static volatile BOOL            sRefreshing = NO;
 
 
 // ============================================================================
+#pragma mark - BLEManagerDelegate
+// ============================================================================
+- (void)ble:(BLEManager *)aManager didFindPeripheral:(CBPeripheral *)aPeripheral {
+    [[self tvDevices] reloadData];
+}
+- (void)ble:(BLEManager *)aManager didDisconnectfromPeripheral:(CBPeripheral *)aPeripheral {
+    [SVProgressHUD showErrorWithStatus:[NSString stringWithFormat:@"Déconnexion de %@", [aPeripheral name]]];
+    [[self tvDevices] reloadData];
+}
+- (void)ble:(BLEManager *)aManager didConnectToPeripheral:(CBPeripheral *)aPeripheral {
+    [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:@"Connecté à %@", [aPeripheral name]]];
+    [[self tvDevices] reloadData];
+}
+- (void)bleDidStartScan:(BLEManager *)aManager {
+    [[self btScan] setEnabled:NO];
+}
+- (void)bleDidStopScan:(BLEManager *)aManager {
+    [[self btScan] setEnabled:YES];
+}
+- (void)ble:(BLEManager *)aManager didReceiveNFCID:(NSString *)aNFCID {
+    
+}
+- (void)ble:(BLEManager *)aManager error:(NSError *)aError {
+    [SVProgressHUD showErrorWithStatus:@"Veuillez activer le Bluetooth dans Réglages."];
+}
+
+
+// ============================================================================
 #pragma mark - ServerManagerDelegate
 // ============================================================================
 - (void)onTestServer:(NSError *)aError version:(NSString *)aVersion {
@@ -215,7 +240,7 @@ static volatile BOOL            sRefreshing = NO;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [tableView tag] == TAG_DEVICES ? [mPeripherals count] : [mUsers count];
+    return [tableView tag] == TAG_DEVICES ? [[[BLEManager instance] peripherals] count] : [mUsers count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -229,7 +254,7 @@ static volatile BOOL            sRefreshing = NO;
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellId];
         }
         
-        CBPeripheral *peripheral = [mPeripherals objectAtIndex:[indexPath row]];
+        CBPeripheral *peripheral = [[[BLEManager instance] peripherals] objectAtIndex:[indexPath row]];
         [[cell textLabel] setText:[peripheral name]];
         [[cell textLabel] setFont:FONT_BOLD(FONT_SZ_MEDIUM)];
 //        [[cell textLabel] setTextColor:TEXT_COLOR_WHITE];
@@ -272,7 +297,9 @@ static volatile BOOL            sRefreshing = NO;
         CGFloat sz = 24;
         NSDictionary * pics = [user objectForKey:@"picture"];
         NSString * img = [pics objectForKey:@"thumbnail"];
-        [[cell imageView] setImageWithURL:[NSURL URLWithString:img]];
+        [[cell imageView] sd_setImageWithURL:[NSURL URLWithString:img] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            ;
+        }];
 //        [[cell imageView] setContentMode:UIViewContentModeScaleToFill];
         [[[cell imageView] layer] setCornerRadius:(sz / 2)];
         
@@ -285,13 +312,16 @@ static volatile BOOL            sRefreshing = NO;
     [tableView deselectRowAtIndexPath:indexPath animated: true];
     
     if([tableView tag] == TAG_DEVICES) {
-        CBPeripheral * p = [mPeripherals objectAtIndex:[indexPath row]];
-        [self connectToPeripheral:p];
+        [self stopScan];
+        CBPeripheral * p = [[[BLEManager instance] peripherals] objectAtIndex:[indexPath row]];
+        [[BLEManager instance] connectToPeripheral:p];
     }
     else {
         
     }
 }
+
+
 
 
 // ============================================================================
@@ -302,113 +332,10 @@ static volatile BOOL            sRefreshing = NO;
     [ServerManager getAllUsers:self];
 }
 
-
-
-// ============================================================================
-#pragma mark - BLE Connectivity
-// ============================================================================
-- (void)connectToPeripheral:(CBPeripheral *)aPeripheral {
-    
-    // stop scanning
-    [self stopScan];
-    
-    // disconnect from current peripheral
-    if([mSensor activePeripheral]) {
-        [mSensor disconnect:[mSensor activePeripheral]];
-    }
-    
-    // connect to peripheral
-    [mSensor connect:aPeripheral];
-    [mSensor setActivePeripheral:aPeripheral];
-    
-    [[self tvDevices] reloadData];
-}
-
-
-- (void)startScan {
-    
-    // disconnect from current connected peripheral
-    if ([mSensor activePeripheral]) {
-        if ([[mSensor activePeripheral] state] == CBPeripheralStateConnected) {
-            [[mSensor manager] cancelPeripheralConnection:[mSensor activePeripheral]];
-            [mSensor setActivePeripheral:nil];
-        }
-    }
-    
-    // remove peripheral cache from sensor
-    if ([mSensor peripherals]) {
-        [mSensor setPeripherals: nil];
-        [mPeripherals removeAllObjects];
-        [[self tvDevices] reloadData];
-    }
-    
-    //    [self rotateScanButton];
-    [NSTimer scheduledTimerWithTimeInterval:SCAN_TIMEOUT target:self selector:@selector(stopScan) userInfo:nil repeats:NO];
-    if([mSensor findHMSoftPeripherals:SCAN_TIMEOUT] != 0) {
-        [SVProgressHUD showErrorWithStatus:@"Veuillez activer le Bluetooth dans Réglages."];
-    }
-}
-
-
 - (void)stopScan {
     sScanning = NO;
     [mRefreshDevices endRefreshing];
 }
-
-
-
-
-
-
-// ============================================================================
-#pragma mark - BTSmartSensorDelegate
-// ============================================================================
-- (void)peripheralFound:(CBPeripheral *)peripheral {
-    [mPeripherals addObject:peripheral];
-    [[self tvDevices] reloadData];
-    
-    NSString * lastUUID = [Config getLastDeviceUUID];
-    if(lastUUID != nil && [lastUUID isEqualToString:[[peripheral identifier] UUIDString]]) {
-        // found last connected peripheral, connect !
-        [self connectToPeripheral:peripheral];
-    }
-}
-//- (void)serialGATTCharValueUpdated: (NSString *)UUID value: (NSData *)data {
-//    NSLog(@"DATA RECEIVED FROM %@", UUID);
-//    NSString * str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-//    NSLog(@"%@", str);
-//    [[self deviceDelegate] onDataReceived:str];
-//}
-- (void)dataReceived:(NSData *)aData from:(CBPeripheral *)aPeripheral {
-    NSLog(@"Data from %@", [aPeripheral name]);
-    NSString * str = [[NSString alloc] initWithData:aData encoding:NSASCIIStringEncoding];
-    NSLog(@"%@", str);
-    if([str hasPrefix:BLE_HEADER] && [str hasSuffix:BLE_TERMINATOR]) {
-        // seems valid ble string, parse
-        str = [str stringByReplacingOccurrencesOfString:BLE_HEADER withString:@""];
-        str = [str stringByReplacingOccurrencesOfString:BLE_TERMINATOR withString:@""];
-        [[self deviceDelegate] onNFCIDReceived:str];
-    }
-}
-
-- (void)setConnect:(CBPeripheral *)aPeripheral {
-    [Config setLastDeviceUUID:[[aPeripheral identifier] UUIDString]];
-    NSLog(@"%@ connected !", [aPeripheral name]);
-    [[self tvDevices] reloadData];
-    [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:@"Connecté à %@", [aPeripheral name]]];
-    [[self deviceDelegate] didConnect];
-}
-
-
-- (void)setDisconnect:(CBPeripheral *)aPeripheral {
-    [Config resetLastDeviceUUID];
-    NSLog(@"%@ disconnected !", [aPeripheral name]);
-    [[self tvDevices] reloadData];
-    [SVProgressHUD showErrorWithStatus:@"Déconnecté."];
-    [[self deviceDelegate] didDisconnect];
-}
-
-
 
 
 /*

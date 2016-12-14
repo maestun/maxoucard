@@ -16,11 +16,11 @@
 #import "GenericUserView.h"
 #import "ConnectVC.h"
 
-@interface ClientVC : UIViewController <ServerManagerDelegate, DeviceDataDelegate> {
+@interface ClientVC : UIViewController <ServerManagerDelegate, BLEManagerDelegate> {
     
 }
 
-@property (retain, nonatomic) id<DeviceDataDelegate> deviceDelegate;
+//@property (retain, nonatomic) id<DeviceDataDelegate> deviceDelegate;
 
 @end
 

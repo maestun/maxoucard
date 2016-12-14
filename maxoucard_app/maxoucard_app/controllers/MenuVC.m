@@ -41,7 +41,8 @@
 - (IBAction)onTestRemoteServerClicked:(id)sender {
     // send message to web socket
     [[self btTestRemoteServer] setEnabled:NO];
-    NSString * str = [NSString stringWithFormat:@"%@%@%@", WSOCK_COMMAND_REMOTE, WSOCK_COMMAND_SEPARATOR, [[self tfRemoteServer] text]];
+    NSString * str = [NSString stringWithFormat:@"%@%@%@", STRINGIFY(WSOCK_COMMAND_REMOTE),
+                      STRINGIFY(WSOCK_COMMAND_SEPARATOR), [[self tfRemoteServer] text]];
     [[SocketManager instance] sendMessage:str];
 }
 
@@ -120,6 +121,11 @@
         }
         else {
             // TODO: handle error
+        }
+    }
+    else if([aValue hasPrefix:STRINGIFY(WSOCK_COMMAND_AP)]) {
+        if([data count] == 2 && [data[1] isEqualToString:STRINGIFY(WSOCK_OK)]) {
+            // TODO: configured AP successfully ! try to ping remote server
         }
     }
     else {

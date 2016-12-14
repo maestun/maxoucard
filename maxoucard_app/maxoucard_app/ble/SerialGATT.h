@@ -20,6 +20,7 @@
 //- (void) serialGATTCharValueUpdated: (NSString *)UUID value: (NSData *)data;
 - (void) setConnect:(CBPeripheral *)aPeripheral;
 - (void) setDisconnect:(CBPeripheral *)aPeripheral;
+- (void) scanStop;
 @end
 
 @interface SerialGATT : NSObject<CBCentralManagerDelegate, CBPeripheralDelegate> {
